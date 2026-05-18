@@ -1,390 +1,897 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MusicStoreSdk — Documentation</title>
+  <title>MusicStore — DancingMusic 音乐商店</title>
   <style>
-    :root, [data-theme="light"] {
-      --bg: #fafafa; --surface: #ffffff; --fg: #0f0f0f; --fg-2: #1a1a1a;
-      --muted: #6b6b6b; --meta: #888888;
-      --border: #e5e5e5; --border-soft: #f0f0f0;
-      --accent: #2f6feb; --accent-on: #ffffff;
-      --code-bg: #1e1e1e; --code-fg: #d4d4d4;
-      --search-bg: var(--bg); --search-border: var(--border);
-      --mark-bg: #fff3bf; --mark-fg: #0f0f0f;
+    /* ── CSS Variables / Theming ── */
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+      --font-mono: ui-monospace, "JetBrains Mono", "Fira Code", "SF Mono", monospace;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --max-w: 1200px;
     }
+
     [data-theme="dark"] {
-      --bg: #111111; --surface: #1a1a1a; --fg: #e5e5e5; --fg-2: #cccccc;
-      --muted: #999999; --meta: #777777;
-      --border: #2a2a2a; --border-soft: #222222;
-      --accent: #5b9bf5; --accent-on: #111111;
-      --code-bg: #0d0d0d; --code-fg: #d4d4d4;
-      --search-bg: #1a1a1a; --search-border: #333;
-      --mark-bg: #5b4a00; --mark-fg: #fef3c7;
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111118;
+      --bg-card: rgba(26, 26, 46, 0.6);
+      --bg-card-hover: rgba(30, 30, 55, 0.8);
+      --bg-glass: rgba(26, 26, 46, 0.45);
+      --bg-code: #0d0d14;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 255, 255, 0.12);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a0a0b8;
+      --text-muted: #6b6b80;
+      --accent-1: #7c5cf5;
+      --accent-2: #3b82f6;
+      --accent-gradient: linear-gradient(135deg, #7c5cf5, #3b82f6);
+      --accent-glow: rgba(124, 92, 245, 0.15);
+      --code-fg: #d4d4dc;
+      --code-kw: #c586c0;
+      --code-tp: #4ec9b0;
+      --code-str: #ce9178;
+      --code-cm: #6a9955;
+      --code-fn: #dcdcaa;
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
+      --shadow-glow: 0 0 60px rgba(124, 92, 245, 0.08);
+      --cover-bg: #1a1a2e;
+      --search-bg: rgba(26, 26, 46, 0.8);
+      --arch-node: rgba(26, 26, 46, 0.85);
+      --arch-border: rgba(124, 92, 245, 0.3);
+      --arch-line: rgba(124, 92, 245, 0.4);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; font-size: 16px; line-height: 1.6; color: var(--fg); background: var(--bg); transition: background .2s, color .2s; }
-    mark { background: var(--mark-bg); color: var(--mark-fg); border-radius: 2px; padding: 0 2px; }
 
-    /* ── Layout ── */
-    .doc-layout { display: grid; grid-template-columns: 220px minmax(0,1fr) 200px; min-height: 100vh; }
+    [data-theme="light"] {
+      --bg-primary: #f8f8fc;
+      --bg-secondary: #f0f0f6;
+      --bg-card: rgba(255, 255, 255, 0.7);
+      --bg-card-hover: rgba(255, 255, 255, 0.9);
+      --bg-glass: rgba(255, 255, 255, 0.5);
+      --bg-code: #1e1e2a;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(0, 0, 0, 0.15);
+      --text-primary: #111118;
+      --text-secondary: #555568;
+      --text-muted: #888898;
+      --accent-1: #6d4de8;
+      --accent-2: #2563eb;
+      --accent-gradient: linear-gradient(135deg, #6d4de8, #2563eb);
+      --accent-glow: rgba(109, 77, 232, 0.08);
+      --code-fg: #d4d4dc;
+      --code-kw: #c586c0;
+      --code-tp: #4ec9b0;
+      --code-str: #ce9178;
+      --code-cm: #6a9955;
+      --code-fn: #dcdcaa;
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-glow: 0 0 60px rgba(109, 77, 232, 0.04);
+      --cover-bg: #e8e8f0;
+      --search-bg: rgba(255, 255, 255, 0.9);
+      --arch-node: rgba(255, 255, 255, 0.9);
+      --arch-border: rgba(109, 77, 232, 0.25);
+      --arch-line: rgba(109, 77, 232, 0.3);
+    }
 
-    /* ── Nav ── */
-    .doc-nav { position: sticky; top: 0; height: 100vh; overflow-y: auto; border-right: 1px solid var(--border); background: var(--surface); padding: 24px 0 16px; display: flex; flex-direction: column; }
-    .nav-head { padding: 0 20px; margin-bottom: 16px; }
-    .nav-head h2 { font-size: 14px; font-weight: 600; color: var(--fg); }
-    .nav-head span { font-size: 12px; color: var(--meta); }
-    .nav-toolbar { display: flex; gap: 6px; padding: 0 16px; margin-bottom: 12px; }
-    .nav-toolbar button { width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); cursor: pointer; color: var(--muted); font-size: 14px; display: flex; align-items: center; justify-content: center; transition: border-color .15s, color .15s; }
-    .nav-toolbar button:hover { border-color: var(--accent); color: var(--accent); }
-    .nav-toolbar button.active { border-color: var(--accent); color: var(--accent); background: color-mix(in oklab, var(--accent), transparent 92%); }
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
 
-    .search-box { padding: 0 16px; margin-bottom: 12px; }
-    .search-box input { width: 100%; padding: 8px 12px; border: 1px solid var(--search-border); border-radius: 8px; background: var(--search-bg); color: var(--fg); font-size: 13px; outline: none; transition: border-color .15s; }
-    .search-box input:focus { border-color: var(--accent); }
-    .search-box input::placeholder { color: var(--meta); }
-    .search-results { display: none; padding: 0 16px; margin-bottom: 8px; font-size: 12px; color: var(--meta); }
-    .search-results.show { display: block; }
+    /* ── Utility ── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
 
-    .nav-scroll { flex: 1; overflow-y: auto; }
-    .nav-group { font-size: 11px; font-weight: 600; color: var(--meta); text-transform: uppercase; letter-spacing: .06em; padding: 16px 20px 8px; }
-    .nav-link { display: block; padding: 6px 20px; font-size: 14px; color: var(--muted); text-decoration: none; border-left: 2px solid transparent; transition: color .15s, border-color .15s; }
-    .nav-link:hover { color: var(--fg); }
-    .nav-link.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
-    .nav-link.search-hidden { display: none; }
+    /* ── Scroll animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s var(--transition), transform 0.7s var(--transition);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-    /* ── Article ── */
-    .doc-article { padding: 48px 32px; max-width: 780px; margin: 0 auto; }
-    .doc-article h1 { font-size: 32px; font-weight: 700; line-height: 1.25; letter-spacing: -.02em; margin-bottom: 16px; }
-    .doc-article h2 { font-size: 24px; font-weight: 600; line-height: 1.25; margin-top: 48px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-soft); }
-    .doc-article h3 { font-size: 20px; font-weight: 600; color: var(--fg-2); margin-top: 32px; margin-bottom: 12px; }
-    .doc-article p { color: var(--fg-2); margin-bottom: 16px; }
-    .doc-article ul, .doc-article ol { margin-bottom: 16px; padding-left: 24px; color: var(--fg-2); }
-    .doc-article li { margin-bottom: 8px; }
-    .doc-article a { color: var(--accent); text-decoration: none; }
-    .doc-article a:hover { text-decoration: underline; }
-    .doc-article section.search-hidden { display: none; }
-    .badge { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 9999px; background: color-mix(in oklab, var(--accent), transparent 88%); color: var(--accent); vertical-align: middle; margin-left: 8px; }
-    code { font-family: ui-monospace, "JetBrains Mono", "Fira Code", monospace; font-size: .875em; background: var(--border-soft); padding: 2px 6px; border-radius: 4px; color: var(--fg); }
-    pre { background: var(--code-bg); color: var(--code-fg); border-radius: 8px; padding: 20px; overflow-x: auto; margin-bottom: 24px; font-size: 14px; line-height: 1.55; }
-    pre code { background: none; padding: 0; border-radius: 0; color: inherit; }
-    .kw { color: #c586c0; } .tp { color: #4ec9b0; } .str { color: #ce9178; } .cm { color: #6a9955; } .fn { color: #dcdcaa; } .nr { color: #b5cea8; }
-    .api-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px; }
-    .api-table th { text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--meta); padding: 12px 16px; border-bottom: 2px solid var(--border); }
-    .api-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-soft); color: var(--fg-2); vertical-align: top; }
-    .api-table td:first-child { font-weight: 500; color: var(--fg); white-space: nowrap; }
-    .api-table td code { font-size: .85em; }
+    /* ── Header ── */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+    }
+    .logo-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--accent-gradient);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: #fff;
+    }
+    .logo-tag {
+      font-size: 12px; font-weight: 400; color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .header-btn {
+      width: 36px; height: 36px; border-radius: 10px;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--text-secondary); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; transition: all var(--transition);
+    }
+    .header-btn:hover {
+      border-color: var(--border-hover); color: var(--text-primary);
+      background: var(--accent-glow);
+    }
+    .header-btn.lang-btn { font-size: 13px; font-weight: 600; width: auto; padding: 0 12px; }
 
-    /* ── TOC ── */
-    .doc-toc { position: sticky; top: 0; height: 100vh; overflow-y: auto; border-left: 1px solid var(--border); padding: 48px 20px 24px; background: var(--bg); }
-    .toc-title { font-size: 11px; font-weight: 600; color: var(--meta); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 16px; }
-    .toc-link { display: block; padding: 4px 0; font-size: 14px; color: var(--muted); text-decoration: none; transition: color .15s; }
-    .toc-link:hover { color: var(--fg); }
-    .toc-link.d3 { padding-left: 16px; font-size: 12px; }
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 999px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      font-size: 13px; color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+    .hero-badge-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #4ade80; animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero h1 {
+      font-size: clamp(48px, 8vw, 80px);
+      font-weight: 800; letter-spacing: -0.04em; line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .hero h1 .gradient-text {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--text-secondary); max-width: 560px;
+      margin: 0 auto 40px; line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: 12px; font-size: 15px; font-weight: 600;
+      cursor: pointer; border: none; transition: all var(--transition);
+    }
+    .btn-primary {
+      background: var(--accent-gradient); color: #fff;
+      box-shadow: 0 4px 20px rgba(124, 92, 245, 0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124, 92, 245, 0.4); }
+    .btn-secondary {
+      background: var(--bg-card); color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+
+    /* ── Section shared ── */
+    .section { padding: 100px 24px; }
+    .section-label {
+      font-size: 13px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent-1); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700; letter-spacing: -0.03em; margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 17px; color: var(--text-secondary);
+      max-width: 600px; margin-bottom: 48px;
+    }
+
+    /* ── Features ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      max-width: var(--max-w); margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      transition: all var(--transition);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent-gradient);
+      opacity: 0; transition: opacity var(--transition);
+    }
+    .feature-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      font-size: 32px; margin-bottom: 20px; display: block;
+    }
+    .feature-title {
+      font-size: 20px; font-weight: 700; margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+    .feature-desc {
+      font-size: 15px; color: var(--text-secondary); line-height: 1.7;
+    }
+
+    /* ── Search Demo ── */
+    .search-section { background: var(--bg-secondary); transition: background var(--transition); }
+    .search-demo-wrap { max-width: var(--max-w); margin: 0 auto; }
+    .search-bar-wrap {
+      max-width: 600px; margin: 0 auto 48px; position: relative;
+    }
+    .search-bar {
+      width: 100%; padding: 16px 56px 16px 20px;
+      border-radius: 14px; border: 1px solid var(--border);
+      background: var(--search-bg);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: var(--text-primary); font-size: 16px;
+      font-family: var(--font-sans);
+      outline: none; transition: all var(--transition);
+    }
+    .search-bar::placeholder { color: var(--text-muted); }
+    .search-bar:focus { border-color: var(--accent-1); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .search-icon {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 20px; pointer-events: none;
+    }
+    .search-hint {
+      text-align: center; font-size: 13px; color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .track-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .track-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex; gap: 14px; align-items: center;
+      transition: all var(--transition);
+      cursor: default;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .track-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+    .track-cover {
+      width: 52px; height: 52px; border-radius: 8px;
+      background: var(--cover-bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+      position: relative; overflow: hidden;
+    }
+    .track-cover::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--accent-gradient); opacity: 0.15;
+    }
+    .track-info { flex: 1; min-width: 0; }
+    .track-name {
+      font-size: 15px; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .track-artist {
+      font-size: 13px; color: var(--text-secondary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .track-meta {
+      font-size: 12px; color: var(--text-muted); margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .track-duration {
+      font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+    .track-card.hidden-card { display: none; }
+
+    /* ── Developer ── */
+    .dev-section { position: relative; }
+    .dev-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      max-width: var(--max-w); margin: 0 auto;
+    }
+    .dev-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .dev-panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .dev-panel-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .dev-panel-dot.r { background: #ff5f57; }
+    .dev-panel-dot.y { background: #febc2e; }
+    .dev-panel-dot.g { background: #28c840; }
+    .dev-panel-title {
+      font-size: 13px; color: var(--text-muted); margin-left: 8px;
+    }
+    .dev-code {
+      padding: 24px; overflow-x: auto;
+      font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7;
+      background: var(--bg-code); color: var(--code-fg);
+      white-space: pre;
+    }
+    .dev-code .kw { color: var(--code-kw); }
+    .dev-code .tp { color: var(--code-tp); }
+    .dev-code .str { color: var(--code-str); }
+    .dev-code .cm { color: var(--code-cm); }
+    .dev-code .fn { color: var(--code-fn); }
+    .copy-btn {
+      position: absolute; top: 60px; right: 16px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted); padding: 6px 12px; border-radius: 8px;
+      font-size: 12px; cursor: pointer; transition: all var(--transition);
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.15); color: var(--text-secondary); }
+
+    /* ── Architecture ── */
+    .arch-section { background: var(--bg-secondary); transition: background var(--transition); }
+    .arch-wrap { max-width: 800px; margin: 0 auto; }
+    .arch-diagram {
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+    }
+    .arch-node {
+      background: var(--arch-node);
+      border: 1px solid var(--arch-border);
+      border-radius: var(--radius-sm);
+      padding: 18px 36px;
+      font-weight: 600; font-size: 16px;
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      transition: all var(--transition);
+      min-width: 220px;
+    }
+    .arch-node:hover {
+      border-color: var(--accent-1);
+      box-shadow: 0 0 24px var(--accent-glow);
+      transform: scale(1.03);
+    }
+    .arch-node-sub {
+      font-size: 12px; font-weight: 400; color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .arch-arrow {
+      width: 2px; height: 40px;
+      background: var(--arch-line);
+      position: relative;
+    }
+    .arch-arrow::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid var(--arch-line);
+    }
+    .arch-row {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    }
+    .arch-node.accent-node {
+      background: var(--accent-gradient);
+      color: #fff; border-color: transparent;
+    }
+    .arch-node.accent-node .arch-node-sub { color: rgba(255,255,255,0.7); }
+    .arch-connector-row {
+      display: flex; justify-content: center; gap: 80px; position: relative;
+    }
+    .arch-connector-row::before {
+      content: '';
+      position: absolute; top: 0;
+      left: calc(50% - 120px); right: calc(50% - 120px);
+      height: 2px; background: var(--arch-line);
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 24px 32px;
+      transition: border-color var(--transition);
+    }
+    .footer-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 32px;
+    }
+    .footer-brand { max-width: 280px; }
+    .footer-brand-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .footer-brand-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+    .footer-col-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+    .footer-link {
+      display: block; font-size: 14px; color: var(--text-secondary);
+      padding: 4px 0; transition: color var(--transition);
+    }
+    .footer-link:hover { color: var(--text-primary); }
+    .footer-bottom {
+      max-width: var(--max-w); margin: 32px auto 0;
+      padding-top: 24px; border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--text-muted); text-align: center;
+    }
 
     /* ── Responsive ── */
-    @media (max-width: 1023px) {
-      .doc-layout { grid-template-columns: 1fr; }
-      .doc-nav { position: fixed; left: -280px; width: 280px; z-index: 100; transition: left .2s cubic-bezier(.2,0,0,1); box-shadow: 2px 0 12px rgba(0,0,0,.08); }
-      .doc-nav.open { left: 0; }
-      .doc-toc { display: none; }
-      .doc-article { padding: 32px 16px; }
-      .menu-btn { display: flex; }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .dev-grid { grid-template-columns: 1fr; }
+      .hero { padding: 100px 16px 60px; }
+      .section { padding: 64px 16px; }
+      .arch-connector-row { gap: 24px; }
+      .arch-connector-row::before { left: calc(50% - 80px); right: calc(50% - 80px); }
     }
-    @media (min-width: 1024px) { .menu-btn { display: none; } .overlay { display: none !important; } }
-    .menu-btn { position: fixed; top: 16px; left: 16px; z-index: 101; width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); cursor: pointer; align-items: center; justify-content: center; color: var(--fg); font-size: 18px; }
-    .overlay { position: fixed; inset: 0; z-index: 99; background: rgba(0,0,0,.3); display: none; }
-    .overlay.show { display: block; }
+    @media (max-width: 600px) {
+      .header-inner { padding: 0 16px; }
+      .logo-tag { display: none; }
+      .track-grid { grid-template-columns: 1fr; }
+      .arch-row { flex-direction: column; align-items: center; }
+      .arch-connector-row { flex-direction: column; align-items: center; gap: 0; }
+      .arch-connector-row::before { display: none; }
+      .footer-inner { flex-direction: column; }
+      .footer-links { gap: 32px; }
+    }
   </style>
 </head>
 <body>
 
-<button class="menu-btn" onclick="toggleNav()" aria-label="Menu">&#9776;</button>
-<div class="overlay" id="ov" onclick="toggleNav()"></div>
-
-<div class="doc-layout">
-
-  <nav class="doc-nav" id="nav">
-    <div class="nav-head"><h2>MusicStoreSdk</h2><span>v1.0.0</span></div>
-    <div class="nav-toolbar">
-      <button onclick="toggleTheme()" id="themeBtn" title="Toggle dark mode">&#9790;</button>
-      <button onclick="toggleLang()" id="langBtn" title="Switch language">EN</button>
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">M</div>
+        <span>MusicStore</span>
+        <span class="logo-tag" data-i18n="header_tagline">DancingMusic 音乐商店</span>
+      </a>
+      <div class="header-actions">
+        <button class="header-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span id="themeIcon">&#9788;</span>
+        </button>
+        <button class="header-btn lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+      </div>
     </div>
-    <div class="search-box"><input type="text" id="searchInput" placeholder="Search docs..." data-i18n-placeholder="search_placeholder" /></div>
-    <div class="search-results" id="searchResults"></div>
-    <div class="nav-scroll">
-      <div class="nav-group" data-i18n="nav_guide">Guide</div>
-      <a class="nav-link active" href="#getting-started" data-section="getting-started" data-i18n="nav_getting_started">Getting Started</a>
-      <a class="nav-link" href="#configuration" data-section="configuration" data-i18n="nav_configuration">Configuration</a>
-      <div class="nav-group" data-i18n="nav_api">API Reference</div>
-      <a class="nav-link" href="#music-client" data-section="music-client">MusicStoreClient</a>
-      <a class="nav-link" href="#music-track" data-section="music-track">MusicTrack</a>
-      <a class="nav-link" href="#music-order" data-section="music-order">MusicOrder</a>
-      <a class="nav-link" href="#music-list-query" data-section="music-list-query">MusicListQuery</a>
-      <div class="nav-group" data-i18n="nav_links">Links</div>
-      <a class="nav-link" href="https://github.com/DancingMusic/MusicStoreSdk" target="_blank">GitHub &#8599;</a>
-      <a class="nav-link" href="https://dancingmusic.github.io" target="_blank">DancingMusic &#8599;</a>
+  </header>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span data-i18n="hero_badge">v1.0 &mdash; 开源可扩展音乐平台</span>
+      </div>
+      <h1><span class="gradient-text" data-i18n="hero_title">发现音乐</span></h1>
+      <p class="hero-sub" data-i18n="hero_sub">可插拔的音乐市场，支持多数据源接入。通过 MusicConnect 连接网易云音乐、Spotify 等多个平台，统一搜索与管理。</p>
+      <div class="hero-actions">
+        <a href="#search-demo" class="btn btn-primary" data-i18n="hero_cta_explore">探索曲库</a>
+        <a href="#developer" class="btn btn-secondary" data-i18n="hero_cta_dev">开发者指南</a>
+      </div>
     </div>
-  </nav>
+  </section>
 
-  <main class="doc-article" id="article">
+  <!-- ── Features ── -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label" data-i18n="features_label">Features</div>
+        <h2 class="section-title" data-i18n="features_title">为什么选择 MusicStore</h2>
+        <p class="section-desc" data-i18n="features_desc">一套架构，连接所有音乐平台。</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <span class="feature-icon">&#x1F50C;</span>
+          <h3 class="feature-title" data-i18n="feat_1_title">多数据源</h3>
+          <p class="feature-desc" data-i18n="feat_1_desc">通过 MusicConnect 接入网易云音乐等多个音乐平台，数据源可热插拔、按需加载。</p>
+        </div>
+        <div class="feature-card reveal">
+          <span class="feature-icon">&#x1F50D;</span>
+          <h3 class="feature-title" data-i18n="feat_2_title">智能搜索</h3>
+          <p class="feature-desc" data-i18n="feat_2_desc">跨平台搜索，支持歌词、翻译对照，一次搜索覆盖所有已连接的数据源。</p>
+        </div>
+        <div class="feature-card reveal">
+          <span class="feature-icon">&#x1F9E9;</span>
+          <h3 class="feature-title" data-i18n="feat_3_title">可扩展</h3>
+          <p class="feature-desc" data-i18n="feat_3_desc">第三方开发者可通过 MusicConnector 接口开发自定义数据源，轻松接入新平台。</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section id="getting-started" data-search-keywords="install getting started quick start music store client track">
-      <h1 data-i18n="h_getting_started">Getting Started</h1>
-      <p data-i18n="p_intro">MusicStoreSdk provides the API client, data models, and type definitions for the Music store &mdash; covering track listing, purchasing, and order verification.</p>
-      <h3 data-i18n="h_install">Install</h3>
-<pre><code><span class="fn">npm</span> install @dancingmusic/music-store-sdk</code></pre>
-      <h3 data-i18n="h_quick_start">Quick start</h3>
-<pre><code><span class="kw">import</span> { <span class="tp">MusicStoreClient</span> } <span class="kw">from</span> <span class="str">'@dancingmusic/music-store-sdk'</span>;
+  <!-- ── Search Demo ── -->
+  <section class="section search-section" id="search-demo">
+    <div class="search-demo-wrap container">
+      <div class="reveal" style="text-align:center;">
+        <div class="section-label" data-i18n="search_label">Search</div>
+        <h2 class="section-title" data-i18n="search_title">跨平台搜索</h2>
+        <p class="section-desc" style="margin-left:auto;margin-right:auto;" data-i18n="search_desc">输入关键词，即时检索所有已连接的音乐平台。</p>
+      </div>
+      <div class="search-bar-wrap reveal">
+        <input type="text" class="search-bar" id="demoSearch" data-i18n-placeholder="search_placeholder" placeholder="搜索歌曲、歌手、专辑..." />
+        <span class="search-icon">&#x1F50D;</span>
+      </div>
+      <p class="search-hint reveal" id="searchHint" data-i18n="search_hint">试试搜索「周杰伦」或「晴天」</p>
+      <div class="track-grid reveal" id="trackGrid">
+        <!-- tracks injected by JS -->
+      </div>
+    </div>
+  </section>
 
-<span class="kw">const</span> client = <span class="kw">new</span> <span class="tp">MusicStoreClient</span>({
-  baseUrl: <span class="str">'https://api.dancingmusic.dev/music'</span>,
-  token: <span class="str">'your-auth-token'</span>,
-});
+  <!-- ── Developer ── -->
+  <section class="section dev-section" id="developer">
+    <div class="container">
+      <div class="reveal" style="text-align:center;">
+        <div class="section-label" data-i18n="dev_label">Developer</div>
+        <h2 class="section-title" data-i18n="dev_title">五分钟上手</h2>
+        <p class="section-desc" style="margin-left:auto;margin-right:auto;" data-i18n="dev_desc">安装依赖，编写几行代码，即可接入音乐数据。</p>
+      </div>
+      <div class="dev-grid reveal">
+        <div class="dev-panel">
+          <div class="dev-panel-header">
+            <span class="dev-panel-dot r"></span>
+            <span class="dev-panel-dot y"></span>
+            <span class="dev-panel-dot g"></span>
+            <span class="dev-panel-title" data-i18n="dev_install_title">Install</span>
+          </div>
+          <div class="dev-code"><span class="cm"># Install MusicStore SDK</span>
+<span class="fn">npm</span> install @dancingmusic/music-store
 
-<span class="cm">// List all tracks</span>
-<span class="kw">const</span> tracks = <span class="kw">await</span> client.<span class="fn">list</span>({ genre: <span class="str">'electronic'</span> });
+<span class="cm"># Install MusicConnect (data source connector)</span>
+<span class="fn">npm</span> install @dancingmusic/music-connect
 
-<span class="cm">// Purchase a track</span>
-<span class="kw">const</span> order = <span class="kw">await</span> client.<span class="fn">createOrder</span>(tracks[<span class="nr">0</span>].id);</code></pre>
-    </section>
+<span class="cm"># Install NetEase Cloud Music connector</span>
+<span class="fn">npm</span> install @dancingmusic/music-connect-netease</div>
+        </div>
+        <div class="dev-panel" style="position:relative;">
+          <div class="dev-panel-header">
+            <span class="dev-panel-dot r"></span>
+            <span class="dev-panel-dot y"></span>
+            <span class="dev-panel-dot g"></span>
+            <span class="dev-panel-title">Quick Start</span>
+          </div>
+          <div class="dev-code"><span class="kw">import</span> { <span class="tp">MusicStore</span> } <span class="kw">from</span> <span class="str">'@dancingmusic/music-store'</span>;
+<span class="kw">import</span> { <span class="tp">MusicConnect</span> } <span class="kw">from</span> <span class="str">'@dancingmusic/music-connect'</span>;
+<span class="kw">import</span> { <span class="tp">NeteaseConnector</span> } <span class="kw">from</span> <span class="str">'@dancingmusic/music-connect-netease'</span>;
 
-    <section id="configuration" data-search-keywords="configuration options baseUrl token timeout MusicStoreClientOptions">
-      <h2 data-i18n="h_configuration">Configuration</h2>
-      <p data-i18n="p_config">The client accepts a <code>MusicStoreClientOptions</code> object:</p>
-      <table class="api-table"><thead><tr><th data-i18n="th_option">Option</th><th data-i18n="th_type">Type</th><th data-i18n="th_desc">Description</th></tr></thead><tbody>
-        <tr><td><code>baseUrl</code></td><td><code>string</code></td><td data-i18n="td_cfg_base_url">Music store API base URL (trailing slash is trimmed)</td></tr>
-        <tr><td><code>token</code></td><td><code>string</code></td><td><span data-i18n="td_cfg_token">Auth token for authenticated endpoints</span> <span class="badge">optional</span></td></tr>
-        <tr><td><code>timeoutMs</code></td><td><code>number</code></td><td><span data-i18n="td_cfg_timeout">Request timeout in milliseconds</span> <span class="badge">optional</span></td></tr>
-      </tbody></table>
-      <p data-i18n="p_config_access">Access the resolved config via the read-only <code>client.config</code> property.</p>
-    </section>
+<span class="cm">// Register data source</span>
+<span class="kw">const</span> connect = <span class="kw">new</span> <span class="tp">MusicConnect</span>();
+connect.<span class="fn">register</span>(<span class="kw">new</span> <span class="tp">NeteaseConnector</span>());
 
-    <section id="music-client" data-search-keywords="MusicStoreClient list get createOrder verifyOrder error handling config">
-      <h2>MusicStoreClient</h2>
-      <p data-i18n="p_music_client">The main API client class for interacting with the music store.</p>
-      <table class="api-table"><thead><tr><th data-i18n="th_method">Method</th><th data-i18n="th_signature">Signature</th><th data-i18n="th_desc">Description</th></tr></thead><tbody>
-        <tr><td><code>list</code></td><td><code>(query?: MusicListQuery) =&gt; Promise&lt;MusicTrack[]&gt;</code></td><td data-i18n="td_mc_list">List tracks with optional filters</td></tr>
-        <tr><td><code>get</code></td><td><code>(trackId: string) =&gt; Promise&lt;MusicTrack | null&gt;</code></td><td data-i18n="td_mc_get">Get a single track by ID</td></tr>
-        <tr><td><code>createOrder</code></td><td><code>(trackId: string) =&gt; Promise&lt;MusicOrder&gt;</code></td><td data-i18n="td_mc_create">Create a purchase order</td></tr>
-        <tr><td><code>verifyOrder</code></td><td><code>(orderId: string) =&gt; Promise&lt;MusicOrder | null&gt;</code></td><td data-i18n="td_mc_verify">Verify order payment status</td></tr>
-        <tr><td><code>config</code></td><td><code>{ baseUrl, hasToken }</code></td><td data-i18n="td_mc_config">Read-only resolved configuration</td></tr>
-      </tbody></table>
-      <h3 data-i18n="h_error_handling">Error handling</h3>
-      <p data-i18n="p_error_handling">Methods throw a standard <code>Error</code> when required parameters are missing (e.g. empty <code>trackId</code>). Network errors propagate as-is from the underlying fetch implementation.</p>
-    </section>
+<span class="cm">// Create store instance</span>
+<span class="kw">const</span> store = <span class="kw">new</span> <span class="tp">MusicStore</span>({ connect });
 
-    <section id="music-track" data-search-keywords="MusicTrack id title artist album durationSec price currency version createdAt updatedAt">
-      <h2>MusicTrack</h2>
-      <p data-i18n="p_music_track">Represents a music track in the store.</p>
-      <table class="api-table"><thead><tr><th data-i18n="th_field">Field</th><th data-i18n="th_type">Type</th><th data-i18n="th_desc">Description</th></tr></thead><tbody>
-        <tr><td><code>id</code></td><td><code>string</code></td><td data-i18n="td_mt_id">Unique track identifier</td></tr>
-        <tr><td><code>title</code></td><td><code>string</code></td><td data-i18n="td_mt_title">Track title</td></tr>
-        <tr><td><code>artist</code></td><td><code>string</code></td><td data-i18n="td_mt_artist">Artist name</td></tr>
-        <tr><td><code>album</code></td><td><code>string</code></td><td><span data-i18n="td_mt_album">Album name</span> <span class="badge">optional</span></td></tr>
-        <tr><td><code>durationSec</code></td><td><code>number</code></td><td data-i18n="td_mt_duration">Duration in seconds</td></tr>
-        <tr><td><code>price</code></td><td><code>number</code></td><td data-i18n="td_mt_price">Price amount</td></tr>
-        <tr><td><code>currency</code></td><td><code>string</code></td><td data-i18n="td_mt_currency">Currency code (e.g. "USD")</td></tr>
-        <tr><td><code>version</code></td><td><code>string</code></td><td data-i18n="td_mt_version">Track version</td></tr>
-        <tr><td><code>createdAt</code></td><td><code>string</code></td><td data-i18n="td_mt_created">ISO creation timestamp</td></tr>
-        <tr><td><code>updatedAt</code></td><td><code>string</code></td><td data-i18n="td_mt_updated">ISO update timestamp</td></tr>
-      </tbody></table>
-    </section>
+<span class="cm">// Search across all sources</span>
+<span class="kw">const</span> results = <span class="kw">await</span> store.<span class="fn">search</span>(<span class="str">'晴天'</span>);
+console.<span class="fn">log</span>(results);</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section id="music-order" data-search-keywords="MusicOrder orderId trackId amount currency status pending paid failed refunded">
-      <h2>MusicOrder</h2>
-      <p data-i18n="p_music_order">Represents a purchase order.</p>
-      <table class="api-table"><thead><tr><th data-i18n="th_field">Field</th><th data-i18n="th_type">Type</th><th data-i18n="th_desc">Description</th></tr></thead><tbody>
-        <tr><td><code>orderId</code></td><td><code>string</code></td><td data-i18n="td_mo_id">Unique order identifier</td></tr>
-        <tr><td><code>trackId</code></td><td><code>string</code></td><td data-i18n="td_mo_track">Purchased track ID</td></tr>
-        <tr><td><code>amount</code></td><td><code>number</code></td><td data-i18n="td_mo_amount">Payment amount</td></tr>
-        <tr><td><code>currency</code></td><td><code>string</code></td><td data-i18n="td_mo_currency">Currency code</td></tr>
-        <tr><td><code>status</code></td><td><code>'pending' | 'paid' | 'failed' | 'refunded'</code></td><td data-i18n="td_mo_status">Order status</td></tr>
-      </tbody></table>
-    </section>
+  <!-- ── Architecture ── -->
+  <section class="section arch-section" id="architecture">
+    <div class="container">
+      <div class="reveal" style="text-align:center;">
+        <div class="section-label" data-i18n="arch_label">Architecture</div>
+        <h2 class="section-title" data-i18n="arch_title">架构概览</h2>
+        <p class="section-desc" style="margin-left:auto;margin-right:auto;" data-i18n="arch_desc">分层解耦设计，数据源可独立扩展。</p>
+      </div>
+      <div class="arch-wrap reveal">
+        <div class="arch-diagram">
+          <div class="arch-node accent-node">
+            DancingMusic
+            <div class="arch-node-sub" data-i18n="arch_dm_sub">Application Layer</div>
+          </div>
+          <div class="arch-arrow"></div>
+          <div class="arch-node">
+            MusicStore
+            <div class="arch-node-sub" data-i18n="arch_ms_sub">SDK / API Layer</div>
+          </div>
+          <div class="arch-arrow"></div>
+          <div class="arch-node">
+            MusicConnect
+            <div class="arch-node-sub" data-i18n="arch_mc_sub">Connector Layer</div>
+          </div>
+          <div class="arch-arrow"></div>
+          <div class="arch-connector-row">
+            <div class="arch-arrow" style="height:30px;"></div>
+            <div class="arch-arrow" style="height:30px;"></div>
+            <div class="arch-arrow" style="height:30px;"></div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-node" style="min-width:150px;">
+              NetEase
+              <div class="arch-node-sub" data-i18n="arch_ne_sub">网易云音乐</div>
+            </div>
+            <div class="arch-node" style="min-width:150px;">
+              Spotify
+              <div class="arch-node-sub" data-i18n="arch_sp_sub">Spotify</div>
+            </div>
+            <div class="arch-node" style="min-width:150px;">
+              Custom...
+              <div class="arch-node-sub" data-i18n="arch_cu_sub">自定义数据源</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section id="music-list-query" data-search-keywords="MusicListQuery page pageSize keyword genre filter pagination">
-      <h2>MusicListQuery</h2>
-      <p data-i18n="p_list_query">Query parameters for the <code>list()</code> method.</p>
-      <table class="api-table"><thead><tr><th data-i18n="th_field">Field</th><th data-i18n="th_type">Type</th><th data-i18n="th_desc">Description</th></tr></thead><tbody>
-        <tr><td><code>page</code></td><td><code>number</code></td><td><span data-i18n="td_lq_page">Page number</span> <span class="badge">optional</span></td></tr>
-        <tr><td><code>pageSize</code></td><td><code>number</code></td><td><span data-i18n="td_lq_size">Items per page</span> <span class="badge">optional</span></td></tr>
-        <tr><td><code>keyword</code></td><td><code>string</code></td><td><span data-i18n="td_lq_keyword">Search keyword</span> <span class="badge">optional</span></td></tr>
-        <tr><td><code>genre</code></td><td><code>string</code></td><td><span data-i18n="td_lq_genre">Filter by genre</span> <span class="badge">optional</span></td></tr>
-      </tbody></table>
-    </section>
+  <!-- ── Footer ── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-name">MusicStore</div>
+        <p class="footer-brand-desc" data-i18n="footer_desc">DancingMusic 开源音乐商店，可插拔数据源架构。</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <div class="footer-col-title" data-i18n="footer_repos">Repositories</div>
+          <a class="footer-link" href="https://github.com/AIDancingMusic/MusicStore" target="_blank" rel="noopener">MusicStore &#x2197;</a>
+          <a class="footer-link" href="https://github.com/AIDancingMusic/MusicConnect" target="_blank" rel="noopener">MusicConnect &#x2197;</a>
+          <a class="footer-link" href="https://github.com/AIDancingMusic/DancingMusic" target="_blank" rel="noopener">DancingMusic &#x2197;</a>
+        </div>
+        <div>
+          <div class="footer-col-title" data-i18n="footer_resources">Resources</div>
+          <a class="footer-link" href="#features" data-i18n="footer_features">Features</a>
+          <a class="footer-link" href="#developer" data-i18n="footer_docs">Developer</a>
+          <a class="footer-link" href="#architecture" data-i18n="footer_arch">Architecture</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      Powered by <strong>DancingMusic</strong> &mdash; Open Source Music Platform
+    </div>
+  </footer>
 
-  </main>
+  <script>
+  /* ── i18n ── */
+  const i18n = {
+    zh: {
+      header_tagline: 'DancingMusic 音乐商店',
+      hero_badge: 'v1.0 — 开源可扩展音乐平台',
+      hero_title: '发现音乐',
+      hero_sub: '可插拔的音乐市场，支持多数据源接入。通过 MusicConnect 连接网易云音乐、Spotify 等多个平台，统一搜索与管理。',
+      hero_cta_explore: '探索曲库',
+      hero_cta_dev: '开发者指南',
+      features_label: '核心特性',
+      features_title: '为什么选择 MusicStore',
+      features_desc: '一套架构，连接所有音乐平台。',
+      feat_1_title: '多数据源',
+      feat_1_desc: '通过 MusicConnect 接入网易云音乐等多个音乐平台，数据源可热插拔、按需加载。',
+      feat_2_title: '智能搜索',
+      feat_2_desc: '跨平台搜索，支持歌词、翻译对照，一次搜索覆盖所有已连接的数据源。',
+      feat_3_title: '可扩展',
+      feat_3_desc: '第三方开发者可通过 MusicConnector 接口开发自定义数据源，轻松接入新平台。',
+      search_label: '搜索',
+      search_title: '跨平台搜索',
+      search_desc: '输入关键词，即时检索所有已连接的音乐平台。',
+      search_placeholder: '搜索歌曲、歌手、专辑...',
+      search_hint: '试试搜索「周杰伦」或「晴天」',
+      dev_label: '开发者',
+      dev_title: '五分钟上手',
+      dev_desc: '安装依赖，编写几行代码，即可接入音乐数据。',
+      dev_install_title: '安装',
+      arch_label: '架构',
+      arch_title: '架构概览',
+      arch_desc: '分层解耦设计，数据源可独立扩展。',
+      arch_dm_sub: '应用层',
+      arch_ms_sub: 'SDK / API 层',
+      arch_mc_sub: '连接器层',
+      arch_ne_sub: '网易云音乐',
+      arch_sp_sub: 'Spotify',
+      arch_cu_sub: '自定义数据源',
+      footer_desc: 'DancingMusic 开源音乐商店，可插拔数据源架构。',
+      footer_repos: '仓库',
+      footer_resources: '资源',
+      footer_features: '核心特性',
+      footer_docs: '开发者',
+      footer_arch: '架构',
+    },
+    en: {
+      header_tagline: 'DancingMusic Music Store',
+      hero_badge: 'v1.0 — Open-source Extensible Music Platform',
+      hero_title: 'Discover Music',
+      hero_sub: 'A pluggable music marketplace supporting multiple data sources. Connect to NetEase Cloud Music, Spotify and more via MusicConnect for unified search and management.',
+      hero_cta_explore: 'Explore Library',
+      hero_cta_dev: 'Developer Guide',
+      features_label: 'Features',
+      features_title: 'Why MusicStore',
+      features_desc: 'One architecture, all music platforms connected.',
+      feat_1_title: 'Multi-Source',
+      feat_1_desc: 'Connect to NetEase Cloud Music and other platforms via MusicConnect with hot-pluggable, on-demand data sources.',
+      feat_2_title: 'Smart Search',
+      feat_2_desc: 'Cross-platform search with lyrics and translation support. One search covers all connected data sources.',
+      feat_3_title: 'Extensible',
+      feat_3_desc: 'Third-party developers can build custom data sources through the MusicConnector interface to integrate new platforms.',
+      search_label: 'Search',
+      search_title: 'Cross-Platform Search',
+      search_desc: 'Type a keyword and instantly search all connected music platforms.',
+      search_placeholder: 'Search songs, artists, albums...',
+      search_hint: 'Try searching "Jay Chou" or "Sunny Day"',
+      dev_label: 'Developer',
+      dev_title: 'Get Started in 5 Minutes',
+      dev_desc: 'Install dependencies, write a few lines of code, and start accessing music data.',
+      dev_install_title: 'Install',
+      arch_label: 'Architecture',
+      arch_title: 'Architecture Overview',
+      arch_desc: 'Layered decoupled design with independently extensible data sources.',
+      arch_dm_sub: 'Application Layer',
+      arch_ms_sub: 'SDK / API Layer',
+      arch_mc_sub: 'Connector Layer',
+      arch_ne_sub: 'NetEase Cloud Music',
+      arch_sp_sub: 'Spotify',
+      arch_cu_sub: 'Custom Source',
+      footer_desc: 'DancingMusic open-source music store with pluggable data source architecture.',
+      footer_repos: 'Repositories',
+      footer_resources: 'Resources',
+      footer_features: 'Features',
+      footer_docs: 'Developer',
+      footer_arch: 'Architecture',
+    }
+  };
 
-  <aside class="doc-toc">
-    <div class="toc-title" data-i18n="toc_title">On this page</div>
-    <a class="toc-link" href="#getting-started" data-i18n="nav_getting_started">Getting Started</a>
-    <a class="toc-link" href="#configuration" data-i18n="nav_configuration">Configuration</a>
-    <a class="toc-link" href="#music-client">MusicStoreClient</a>
-    <a class="toc-link d3" href="#music-client" data-i18n="h_error_handling">Error handling</a>
-    <a class="toc-link" href="#music-track">MusicTrack</a>
-    <a class="toc-link" href="#music-order">MusicOrder</a>
-    <a class="toc-link" href="#music-list-query">MusicListQuery</a>
-  </aside>
+  let lang = 'zh';
+  let theme = 'dark';
 
-</div>
-
-<script>
-const i18n = {
-  en: {
-    search_placeholder: 'Search docs...',
-    nav_guide: 'Guide', nav_api: 'API Reference', nav_links: 'Links',
-    nav_getting_started: 'Getting Started', nav_configuration: 'Configuration',
-    toc_title: 'On this page',
-    h_getting_started: 'Getting Started', h_install: 'Install', h_quick_start: 'Quick start',
-    p_intro: 'MusicStoreSdk provides the API client, data models, and type definitions for the Music store &mdash; covering track listing, purchasing, and order verification.',
-    h_configuration: 'Configuration',
-    p_config: 'The client accepts a <code>MusicStoreClientOptions</code> object:',
-    th_option: 'Option', th_type: 'Type', th_desc: 'Description', th_method: 'Method', th_signature: 'Signature', th_field: 'Field',
-    td_cfg_base_url: 'Music store API base URL (trailing slash is trimmed)',
-    td_cfg_token: 'Auth token for authenticated endpoints',
-    td_cfg_timeout: 'Request timeout in milliseconds',
-    p_config_access: 'Access the resolved config via the read-only <code>client.config</code> property.',
-    p_music_client: 'The main API client class for interacting with the music store.',
-    td_mc_list: 'List tracks with optional filters',
-    td_mc_get: 'Get a single track by ID',
-    td_mc_create: 'Create a purchase order',
-    td_mc_verify: 'Verify order payment status',
-    td_mc_config: 'Read-only resolved configuration',
-    h_error_handling: 'Error handling',
-    p_error_handling: 'Methods throw a standard <code>Error</code> when required parameters are missing (e.g. empty <code>trackId</code>). Network errors propagate as-is from the underlying fetch implementation.',
-    p_music_track: 'Represents a music track in the store.',
-    td_mt_id: 'Unique track identifier', td_mt_title: 'Track title',
-    td_mt_artist: 'Artist name', td_mt_album: 'Album name',
-    td_mt_duration: 'Duration in seconds', td_mt_price: 'Price amount',
-    td_mt_currency: 'Currency code (e.g. "USD")', td_mt_version: 'Track version',
-    td_mt_created: 'ISO creation timestamp', td_mt_updated: 'ISO update timestamp',
-    p_music_order: 'Represents a purchase order.',
-    td_mo_id: 'Unique order identifier', td_mo_track: 'Purchased track ID',
-    td_mo_amount: 'Payment amount', td_mo_currency: 'Currency code', td_mo_status: 'Order status',
-    p_list_query: 'Query parameters for the <code>list()</code> method.',
-    td_lq_page: 'Page number', td_lq_size: 'Items per page',
-    td_lq_keyword: 'Search keyword', td_lq_genre: 'Filter by genre',
-    search_no_results: 'No results found',
-    search_results_count: '{n} section(s) found',
-  },
-  zh: {
-    search_placeholder: '搜索文档...',
-    nav_guide: '指南', nav_api: 'API 参考', nav_links: '链接',
-    nav_getting_started: '快速开始', nav_configuration: '配置',
-    toc_title: '本页目录',
-    h_getting_started: '快速开始', h_install: '安装', h_quick_start: '快速上手',
-    p_intro: 'MusicStoreSdk 提供音乐商店的 API 客户端、数据模型和类型定义 &mdash; 涵盖曲目列表、购买和订单验证。',
-    h_configuration: '配置',
-    p_config: '客户端接受一个 <code>MusicStoreClientOptions</code> 配置对象：',
-    th_option: '选项', th_type: '类型', th_desc: '描述', th_method: '方法', th_signature: '签名', th_field: '字段',
-    td_cfg_base_url: '音乐商店 API 基础 URL（尾部斜杠会自动去除）',
-    td_cfg_token: '用于认证端点的令牌',
-    td_cfg_timeout: '请求超时时间（毫秒）',
-    p_config_access: '通过只读属性 <code>client.config</code> 访问已解析的配置。',
-    p_music_client: '与音乐商店交互的主要 API 客户端类。',
-    td_mc_list: '列出曲目，支持可选过滤条件',
-    td_mc_get: '根据 ID 获取单个曲目',
-    td_mc_create: '创建购买订单',
-    td_mc_verify: '验证订单支付状态',
-    td_mc_config: '只读已解析配置',
-    h_error_handling: '错误处理',
-    p_error_handling: '当必填参数缺失时（如空的 <code>trackId</code>），方法会抛出标准 <code>Error</code>。网络错误按原样从底层 fetch 实现传播。',
-    p_music_track: '表示商店中的一个音乐曲目。',
-    td_mt_id: '唯一曲目标识符', td_mt_title: '曲目标题',
-    td_mt_artist: '艺术家名称', td_mt_album: '专辑名称',
-    td_mt_duration: '时长（秒）', td_mt_price: '价格',
-    td_mt_currency: '货币代码（如 "USD"）', td_mt_version: '曲目版本',
-    td_mt_created: 'ISO 创建时间戳', td_mt_updated: 'ISO 更新时间戳',
-    p_music_order: '表示一个购买订单。',
-    td_mo_id: '唯一订单标识符', td_mo_track: '购买的曲目 ID',
-    td_mo_amount: '支付金额', td_mo_currency: '货币代码', td_mo_status: '订单状态',
-    p_list_query: '<code>list()</code> 方法的查询参数。',
-    td_lq_page: '页码', td_lq_size: '每页条数',
-    td_lq_keyword: '搜索关键字', td_lq_genre: '按流派筛选',
-    search_no_results: '未找到结果',
-    search_results_count: '找到 {n} 个章节',
+  function applyLang(l) {
+    lang = l;
+    const dict = i18n[l] || i18n.zh;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (dict[key] != null) el.placeholder = dict[key];
+    });
+    document.getElementById('langBtn').textContent = l === 'zh' ? 'EN' : '中';
+    document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+    localStorage.setItem('ms-lang', l);
   }
-};
 
-let currentLang = localStorage.getItem('doc-lang') || 'en';
-let currentTheme = localStorage.getItem('doc-theme') || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
-
-function applyTheme(t) {
-  currentTheme = t;
-  document.documentElement.setAttribute('data-theme', t);
-  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀' : '☾';
-  localStorage.setItem('doc-theme', t);
-}
-
-function toggleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
-
-function applyLang(lang) {
-  currentLang = lang;
-  const dict = i18n[lang] || i18n.en;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (dict[key] != null) el.innerHTML = dict[key];
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (dict[key] != null) el.placeholder = dict[key];
-  });
-  document.getElementById('langBtn').textContent = lang === 'zh' ? '中' : 'EN';
-  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-  localStorage.setItem('doc-lang', lang);
-}
-
-function toggleLang() { applyLang(currentLang === 'zh' ? 'en' : 'zh'); }
-
-// ── Search ──
-const searchInput = document.getElementById('searchInput');
-const searchResults = document.getElementById('searchResults');
-const sections = document.querySelectorAll('.doc-article section[id]');
-const navLinks = document.querySelectorAll('.nav-link[data-section]');
-
-searchInput.addEventListener('input', function() {
-  const q = this.value.trim().toLowerCase();
-  if (!q) {
-    sections.forEach(s => s.classList.remove('search-hidden'));
-    navLinks.forEach(l => l.classList.remove('search-hidden'));
-    searchResults.classList.remove('show');
-    return;
+  function toggleLang() {
+    applyLang(lang === 'zh' ? 'en' : 'zh');
   }
-  let count = 0;
-  sections.forEach(s => {
-    const text = (s.textContent + ' ' + (s.dataset.searchKeywords || '')).toLowerCase();
-    const match = text.includes(q);
-    s.classList.toggle('search-hidden', !match);
-    if (match) count++;
+
+  function applyTheme(t) {
+    theme = t;
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('themeIcon').innerHTML = t === 'dark' ? '&#9788;' : '&#9790;';
+    localStorage.setItem('ms-theme', t);
+  }
+
+  function toggleTheme() {
+    applyTheme(theme === 'dark' ? 'light' : 'dark');
+  }
+
+  /* ── Track Data ── */
+  const tracks = [
+    { name: '晴天', artist: '周杰伦', album: '叶惠美', duration: '4:29', source: 'NetEase' },
+    { name: '七里香', artist: '周杰伦', album: '七里香', duration: '4:59', source: 'NetEase' },
+    { name: '稻香', artist: '周杰伦', album: '魔杰座', duration: '3:43', source: 'NetEase' },
+    { name: '夜曲', artist: '周杰伦', album: '十一月的萧邦', duration: '4:34', source: 'NetEase' },
+    { name: '青花瓷', artist: '周杰伦', album: '我很忙', duration: '3:59', source: 'NetEase' },
+    { name: '告白气球', artist: '周杰伦', album: '周杰伦的床边故事', duration: '3:35', source: 'NetEase' },
+    { name: '起风了', artist: '买辣椒也用券', album: '起风了', duration: '5:12', source: 'NetEase' },
+    { name: '平凡之路', artist: '朴树', album: '猎户星座', duration: '4:46', source: 'NetEase' },
+    { name: '光年之外', artist: '邓紫棋', album: '光年之外', duration: '3:56', source: 'NetEase' },
+    { name: '夜空中最亮的星', artist: '逃跑计划', album: '世界', duration: '4:12', source: 'NetEase' },
+    { name: 'Shape of You', artist: 'Ed Sheeran', album: '÷ (Divide)', duration: '3:53', source: 'Spotify' },
+    { name: 'Blinding Lights', artist: 'The Weeknd', album: 'After Hours', duration: '3:20', source: 'Spotify' },
+  ];
+
+  const coverEmojis = ['&#127925;', '&#127926;', '&#127927;', '&#127928;', '&#127929;', '&#127930;'];
+
+  function renderTracks(filter) {
+    const grid = document.getElementById('trackGrid');
+    const q = (filter || '').toLowerCase();
+    let html = '';
+    let count = 0;
+    tracks.forEach((t, i) => {
+      const text = (t.name + t.artist + t.album).toLowerCase();
+      const hidden = q && !text.includes(q);
+      if (!hidden) count++;
+      html += '<div class="track-card' + (hidden ? ' hidden-card' : '') + '">'
+        + '<div class="track-cover">' + coverEmojis[i % coverEmojis.length] + '</div>'
+        + '<div class="track-info">'
+        + '<div class="track-name">' + t.name + '</div>'
+        + '<div class="track-artist">' + t.artist + '</div>'
+        + '<div class="track-meta">' + t.album + ' &middot; ' + t.source + '</div>'
+        + '</div>'
+        + '<div class="track-duration">' + t.duration + '</div>'
+        + '</div>';
+    });
+    grid.innerHTML = html;
+    const hint = document.getElementById('searchHint');
+    if (q) {
+      hint.textContent = (lang === 'zh'
+        ? '找到 ' + count + ' 首曲目'
+        : 'Found ' + count + ' track(s)');
+    } else {
+      const dict = i18n[lang] || i18n.zh;
+      hint.textContent = '';
+      hint.innerHTML = dict.search_hint;
+    }
+  }
+
+  document.getElementById('demoSearch').addEventListener('input', function () {
+    renderTracks(this.value.trim());
   });
-  navLinks.forEach(l => {
-    const sid = l.dataset.section;
-    const sec = document.getElementById(sid);
-    l.classList.toggle('search-hidden', sec ? sec.classList.contains('search-hidden') : false);
-  });
-  const dict = i18n[currentLang] || i18n.en;
-  searchResults.textContent = count ? dict.search_results_count.replace('{n}', count) : dict.search_no_results;
-  searchResults.classList.add('show');
-});
 
-// ── Scroll highlight ──
-const headings = document.querySelectorAll('h1[id], h2[id]');
-const allNavLinks = document.querySelectorAll('.nav-link[href^="#"]');
-const tocLinks = document.querySelectorAll('.toc-link');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  headings.forEach(s => { if (scrollY >= s.offsetTop - 80) cur = s.id || s.closest('section[id]')?.id || ''; });
-  allNavLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
-  tocLinks.forEach(l => { l.style.color = l.getAttribute('href') === '#' + cur ? 'var(--accent)' : ''; });
-}, { passive: true });
+  /* ── Scroll Reveal ── */
+  function initReveal() {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }
 
-function toggleNav() { document.getElementById('nav').classList.toggle('open'); document.getElementById('ov').classList.toggle('show'); }
-
-// ── Init ──
-applyTheme(currentTheme);
-applyLang(currentLang);
-</script>
+  /* ── Init ── */
+  (function init() {
+    const savedTheme = localStorage.getItem('ms-theme');
+    const savedLang = localStorage.getItem('ms-lang');
+    applyTheme(savedTheme || 'dark');
+    applyLang(savedLang || 'zh');
+    renderTracks('');
+    initReveal();
+  })();
+  </script>
 </body>
 </html>
