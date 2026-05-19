@@ -10,6 +10,7 @@ export interface MusicTrack {
   title: string;
   artist: string;
   album?: string;
+  coverUrl?: string;
   durationSec: number;
   price: number;
   currency: string;
