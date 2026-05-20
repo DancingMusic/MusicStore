@@ -4,12 +4,12 @@ export class MusicConnectorRegistry {
   private connectors = new Map<string, MusicConnector>();
   private activeId: string | null = null;
 
-  async register(connector: MusicConnector): Promise<void> {
+  async register(connector: MusicConnector, config?: Record<string, unknown>): Promise<void> {
     if (this.connectors.has(connector.meta.id)) {
       throw new Error(`Connector "${connector.meta.id}" is already registered`);
     }
     if (connector.init) {
-      await connector.init();
+      await connector.init(config);
     }
     this.connectors.set(connector.meta.id, connector);
   }
