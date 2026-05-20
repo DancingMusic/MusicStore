@@ -26,6 +26,23 @@ export interface LyricLine {
   translated?: string;
 }
 
+export interface ConnectorConfigField {
+  /** Key under which the value is stored in the config object passed to init(). */
+  key: string;
+  /** Human-readable label shown in the form. */
+  label: string;
+  /** Input type hint. password masks the value; url validates URL shape. */
+  type?: "text" | "url" | "password";
+  /** When true, the host blocks registration until the user provides a value. */
+  required?: boolean;
+  /** Placeholder shown inside the input. */
+  placeholder?: string;
+  /** Default value pre-filled into the input. */
+  default?: string;
+  /** Short explanatory hint shown beneath the input. */
+  help?: string;
+}
+
 export interface MusicConnectorMeta {
   id: string;
   name: string;
@@ -33,6 +50,12 @@ export interface MusicConnectorMeta {
   description?: string;
   version: string;
   capabilities: MusicConnectorCapability[];
+  /**
+   * Declarative schema of the config object the connector accepts via
+   * `init(config)`. The host renders these as form fields when adding
+   * or editing the connector. Omit when no config is needed.
+   */
+  configSchema?: ConnectorConfigField[];
 }
 
 export type MusicConnectorCapability =
