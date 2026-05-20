@@ -94,6 +94,15 @@ export interface MusicPlaylistQuery {
   category?: string;
   page?: number;
   pageSize?: number;
+  /**
+   * Sort order. Connectors that can't honor a given order should pick the
+   * closest fit and document it in their README. Supported values:
+   *  - `hot`  (default) — most-played / most-listened / most-downloaded
+   *  - `new`            — most-recently-created / latest
+   *  - `trending`       — short-term momentum (last few days). Falls back
+   *                       to `hot` when upstream has no such concept.
+   */
+  sort?: "hot" | "new" | "trending";
 }
 
 export interface MusicConnector {
