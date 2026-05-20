@@ -66,6 +66,36 @@ export type MusicConnectorCapability =
   | "user-library"
   | "recommendations";
 
+/** A curated/featured playlist surfaced by the data source. */
+export interface MusicPlaylist {
+  /** Prefixed id (e.g. `netease-playlist:12345`, `spotify-playlist:37i9...`). */
+  id: string;
+  name: string;
+  description?: string;
+  /** Cover image URL (display as link or thumb at host's discretion). */
+  coverUrl?: string;
+  /** Approximate track count if the upstream API provides it. */
+  trackCount?: number;
+  /** Who curated this playlist (platform editor, user, or "Editor's Picks"). */
+  curator?: string;
+  /** External link back to the playlist on the original platform. */
+  externalUrl?: string;
+}
+
+export interface MusicPlaylistList {
+  playlists: MusicPlaylist[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface MusicPlaylistQuery {
+  /** Per-connector category id (e.g. NetEase tag, Spotify category, "top"). */
+  category?: string;
+  page?: number;
+  pageSize?: number;
+}
+
 export interface MusicConnector {
   readonly meta: MusicConnectorMeta;
 
@@ -76,4 +106,19 @@ export interface MusicConnector {
   getTrack(trackId: string): Promise<MusicTrack | null>;
   getStreamUrl(trackId: string): Promise<MusicStreamInfo | null>;
   getLyrics?(trackId: string): Promise<MusicLyrics | null>;
+
+  /**
+   * List curated / featured / popular playlists from the data source.
+   * Optional — declare `playlist` in `meta.capabilities` to advertise support.
+   */
+  listPlaylists?(query?: MusicPlaylistQuery): Promise<MusicPlaylistList>;
+
+  /**
+   * Fetch the full track list for a given playlist id.
+   * Reuses MusicSearchResult shape (tracks + pagination).
+   */
+  getPlaylistTracks?(
+    playlistId: string,
+    opts?: { page?: number; pageSize?: number },
+  ): Promise<MusicSearchResult>;
 }
