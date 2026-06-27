@@ -78,14 +78,42 @@ export type MusicConnectorLoginStatus =
 export type MusicConnectorLoginIntent = "status" | "start" | "continue" | "cancel" | "logout";
 export type MusicConnectorLoginFlow = "qr" | "oauth" | "browser" | "device-code" | "manual-token" | "custom";
 export type MusicConnectorLoginActionType = "qr" | "open-url" | "manual-input" | "message";
+export type MusicConnectorLoginCookieProvider = "netease" | "qq-music" | "apple-music" | "custom" | string;
 
 export interface MusicConnectorLoginRequest {
   /** What the host is asking the connector to do. Defaults to `status`. */
   intent?: MusicConnectorLoginIntent;
   /** Connector-scoped flow id returned by a previous login() call. */
   flowId?: string;
-  /** Optional host-provided values for manual-input/custom flows. */
+  /** Optional host-provided values for manual-input/custom/browser cookie flows. */
   input?: Record<string, unknown>;
+}
+
+export interface MusicConnectorLoginCookieCapture {
+  /**
+   * Provider hint for hosts with a native implementation. The host may use it
+   * to open the original provider page in an isolated desktop session and
+   * return a cookie string through login({ intent: "continue", input }).
+   */
+  provider?: MusicConnectorLoginCookieProvider;
+  /** Optional override for the browser URL. Defaults to the action's url. */
+  url?: string;
+  /** Optional title for a native login window. */
+  title?: string;
+  /** Stable storage partition for desktop sessions. Hosts may ignore this. */
+  partition?: string;
+  /** Allowed cookie domains to include in the returned Cookie header. */
+  domains?: string[];
+  /** Cookie names that indicate the login has completed. */
+  requiredCookieNames?: string[];
+  /** Cookie names that indicate playback-capable login for platforms that need it. */
+  playbackCookieNames?: string[];
+  /** Cookie priority/order when constructing a Cookie header. */
+  cookieNames?: string[];
+  /** Optional URL to visit after login so providers can mint playback cookies. */
+  warmupUrl?: string;
+  /** Host-facing explanation for this capture flow. */
+  message?: string;
 }
 
 export interface MusicConnectorLoginAction {
@@ -97,6 +125,8 @@ export interface MusicConnectorLoginAction {
   imageUrl?: string;
   /** Login URL for OAuth, device-code, or manual token generation. Hosts should embed it in-app when possible. */
   url?: string;
+  /** Optional hint for desktop hosts to capture official web-session cookies in-app. */
+  cookieCapture?: MusicConnectorLoginCookieCapture;
   /** Manual fields requested from the user by this connector. */
   fields?: ConnectorConfigField[];
   message?: string;

@@ -528,8 +528,8 @@
 
       <div class="nav-group">
         <p class="nav-label">GitHub Pages</p>
-        <a class="nav-link" href="https://dancingmusic.github.io/MusicConnect-NetEase/" target="_blank" rel="noreferrer">NetEase <small>QR</small></a>
-        <a class="nav-link" href="https://dancingmusic.github.io/MusicConnect-QQMusic/" target="_blank" rel="noreferrer">QQ Music <small>QR</small></a>
+        <a class="nav-link" href="https://dancingmusic.github.io/MusicConnect-NetEase/" target="_blank" rel="noreferrer">NetEase <small>Web</small></a>
+        <a class="nav-link" href="https://dancingmusic.github.io/MusicConnect-QQMusic/" target="_blank" rel="noreferrer">QQ Music <small>Web</small></a>
         <a class="nav-link" href="https://dancingmusic.github.io/MusicConnect-iTunes/" target="_blank" rel="noreferrer">iTunes <small>Web</small></a>
         <a class="nav-link" href="https://dancingmusic.github.io/MusicConnect-Archive/" target="_blank" rel="noreferrer">Archive <small>Public</small></a>
         <a class="nav-link" href="https://dancingmusic.github.io/MusicConnect-Radio/" target="_blank" rel="noreferrer">Radio <small>Live</small></a>
@@ -558,8 +558,8 @@
           <div class="system-map" aria-label="MusicStore architecture diagram">
             <div class="node host"><strong>DancingMusic host</strong><span>播放器、连接器管理、配置持久化</span></div>
             <div class="node sdk"><strong>MusicStore SDK</strong><span>MusicConnector 接口和 registry</span></div>
-            <div class="node impl"><strong>MusicConnect-NetEase</strong><span>QR 登录、搜索、歌词、歌单</span></div>
-            <div class="node impl"><strong>MusicConnect-QQMusic</strong><span>自部署代理、QR 登录、歌单</span></div>
+            <div class="node impl"><strong>MusicConnect-NetEase</strong><span>官方网页登录、搜索、歌词、歌单</span></div>
+            <div class="node impl"><strong>MusicConnect-QQMusic</strong><span>官方网页登录、高级代理、歌单</span></div>
             <div class="node impl"><strong>MusicConnect-iTunes</strong><span>iTunes Search、MusicKit token</span></div>
           </div>
         </section>
@@ -573,22 +573,22 @@
 
         <section class="doc-section" id="implementations">
           <h2>官方实现目录</h2>
-          <p class="section-intro">每张卡片都指向对应实现仓库和 GitHub Pages demo。需要账号或 token 的数据源会在 demo 顶部显示登录或配置入口；公共数据源保持匿名可用。</p>
+          <p class="section-intro">每张卡片都指向对应实现仓库和 GitHub Pages demo。需要账号的数据源优先展示官方网页登录入口；代理、cookie、token 字段只作为高级配置或调试入口。</p>
           <div class="filter-row">
             <input id="connectorFilter" type="search" placeholder="过滤连接器，例如 qq、login、lyrics、public">
             <span class="tag gray" id="filterCount">6 个实现</span>
           </div>
 
           <div class="connector-grid" id="connectorGrid">
-            <article class="connector-card" data-connector-card data-filter="netease 网易云 qr login lyrics playlist public proxy v0.4.0">
-              <div class="connector-top"><div><h3>MusicConnect-NetEase</h3><p>网易云音乐公开代理；支持扫码登录 cookie、搜索、播放、歌单和原生歌词。</p></div><span class="tag green">QR login</span></div>
-              <div class="connector-meta"><span><b>Tag</b> v0.4.0</span><span><b>Lyrics</b> native</span><span><b>Auth</b> QR cookie</span><span><b>Default</b> enabled</span></div>
+            <article class="connector-card" data-connector-card data-filter="netease 网易云 web login cookie lyrics playlist public proxy v0.5.0">
+              <div class="connector-top"><div><h3>MusicConnect-NetEase</h3><p>网易云音乐公开代理；桌面端用官方网页登录捕获 cookie，支持搜索、播放、歌单和原生歌词。</p></div><span class="tag green">Web login</span></div>
+              <div class="connector-meta"><span><b>Tag</b> v0.5.0</span><span><b>Lyrics</b> native</span><span><b>Auth</b> web cookie</span><span><b>Default</b> enabled</span></div>
               <div class="card-actions"><a class="button primary" href="https://dancingmusic.github.io/MusicConnect-NetEase/" target="_blank" rel="noreferrer">打开 Demo</a><a class="button" href="https://github.com/DancingMusic/MusicConnect-NetEase" target="_blank" rel="noreferrer">GitHub</a></div>
             </article>
 
-            <article class="connector-card" data-connector-card data-filter="qq music qq音乐 qr login playlist proxy v0.4.0">
-              <div class="connector-top"><div><h3>MusicConnect-QQMusic</h3><p>QQ 音乐自部署代理实现；通过连接器配置代理地址后可扫码登录并保存 auth cookie。</p></div><span class="tag rust">Needs proxy</span></div>
-              <div class="connector-meta"><span><b>Tag</b> v0.4.0</span><span><b>Lyrics</b> host fallback</span><span><b>Auth</b> QR cookie</span><span><b>Default</b> listed</span></div>
+            <article class="connector-card" data-connector-card data-filter="qq music qq音乐 web login playlist proxy v0.5.0 cookie">
+              <div class="connector-top"><div><h3>MusicConnect-QQMusic</h3><p>QQ 音乐官方网页登录捕获 cookie；QQ 曲库搜索/播放代理放进高级设置。</p></div><span class="tag rust">Advanced proxy</span></div>
+              <div class="connector-meta"><span><b>Tag</b> v0.5.0</span><span><b>Lyrics</b> host fallback</span><span><b>Auth</b> web cookie</span><span><b>Default</b> listed</span></div>
               <div class="card-actions"><a class="button primary" href="https://dancingmusic.github.io/MusicConnect-QQMusic/" target="_blank" rel="noreferrer">打开 Demo</a><a class="button" href="https://github.com/DancingMusic/MusicConnect-QQMusic" target="_blank" rel="noreferrer">GitHub</a></div>
             </article>
 
@@ -620,11 +620,11 @@
 
         <section class="doc-section" id="login">
           <h2>登录模型</h2>
-          <p class="section-intro">SDK 只提供一个可选入口：<code>login(request)</code>。扫码、OAuth、网页弹窗、设备码和手动 token 都是连接器自己的实现细节，宿主只渲染返回的 actions。</p>
+          <p class="section-intro">SDK 只提供一个可选入口：<code>login(request)</code>。扫码、OAuth、网页弹窗、设备码和手动 token 都是连接器自己的实现细节，宿主只渲染返回的 actions；桌面端可按 <code>cookieCapture</code> 元数据打开官方网页并回传 cookie。</p>
           <div class="flow">
             <div class="flow-step"><span class="num">1</span><strong>status</strong><p>宿主先询问当前状态，连接器返回 anonymous、authenticated、expired 或 error。</p></div>
             <div class="flow-step"><span class="num">2</span><strong>start</strong><p>用户点击登录后，连接器返回二维码、open-url、manual-input 或 message。</p></div>
-            <div class="flow-step"><span class="num">3</span><strong>continue</strong><p>QR/设备码流程用 flowId 继续轮询；手动流程把 input 传回连接器。</p></div>
+            <div class="flow-step"><span class="num">3</span><strong>continue</strong><p>QR/设备码流程用 flowId 继续轮询；网页登录可把桌面端读取到的 cookie 放进 input 传回连接器。</p></div>
             <div class="flow-step"><span class="num">4</span><strong>configPatch</strong><p>成功后只持久化连接器返回的 cookie/token 补丁，不在宿主增加平台字段。</p></div>
           </div>
           <div class="code-block">
@@ -633,7 +633,12 @@
 
 for (const action of result.actions ?? []) {
   if (action.type === "qr") renderQr(action.imageUrl ?? action.qrUrl);
-  if (action.type === "open-url") openInPlayerModal(action.url);
+  if (action.type === "open-url" &amp;&amp; action.cookieCapture) {
+    const cookie = await openDesktopLoginWindow(action.cookieCapture);
+    await connector.login({ intent: "continue", flowId: result.flowId, input: { cookie } });
+  } else if (action.type === "open-url") {
+    openInPlayerModal(action.url);
+  }
   if (action.type === "manual-input") renderForm(action.fields);
 }
 
@@ -641,7 +646,7 @@ if (result.configPatch) {
   persistConnectorConfig(connector.meta.id, result.configPatch);
 }</code></pre>
           </div>
-          <div class="note">网页登录必须优先在播放器或 demo 页面内弹窗承载。只有上游禁止 iframe 嵌入时，才提供外部浏览器兜底入口。</div>
+          <div class="note">网页登录必须优先在播放器内承载。桌面端可用独立官方登录窗口读取允许的 cookie；Web demo 无法跨站读取 cookie 时，只展示 iframe/外部打开兜底。</div>
         </section>
 
         <section class="doc-section" id="contract">
@@ -649,7 +654,7 @@ if (result.configPatch) {
           <p class="section-intro">MusicConnect-* 实现仓库只依赖 MusicStore SDK 类型，不直接依赖 DancingMusic 宿主。每个实现都必须发布 ESM bundle、契约测试和 GitHub Pages demo。</p>
           <div class="spec-list">
             <div class="spec-item"><strong>统一类型</strong><p>实现 <code>MusicConnector</code>，返回带平台前缀的 <code>MusicTrack.id</code>。</p></div>
-            <div class="spec-item"><strong>声明配置</strong><p>需要代理、cookie 或 token 时，通过 <code>meta.configSchema</code> 让宿主自动渲染表单。</p></div>
+            <div class="spec-item"><strong>声明高级配置</strong><p>需要代理、cookie 或 token 时，通过 <code>meta.configSchema</code> 声明字段；宿主应把它放在高级设置里，普通用户优先走登录入口。</p></div>
             <div class="spec-item"><strong>真实可播放</strong><p>默认激活连接器必须返回真实 stream，禁止 mock 或点播后才失败。</p></div>
           </div>
           <table class="matrix" aria-label="Connector capability matrix">
@@ -672,7 +677,7 @@ if (result.configPatch) {
             <pre id="bundle-example"><code>const record = {
   id: "netease-cloud-music",
   source: "https://github.com/DancingMusic/MusicConnect-NetEase",
-  bundleUrl: "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase@v0.4.0/dist/index.js",
+  bundleUrl: "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase@v0.5.0/dist/index.js",
 };
 
 const mod = await import(record.bundleUrl);
@@ -693,13 +698,13 @@ await connector.init(savedConnectorConfig);</code></pre>
             <div class="check">README 包含 Setup、GitHub Pages demo、固定 tag bundle URL。</div>
             <div class="check">契约测试覆盖 meta、search、getStreamUrl、null stream 和登录流程。</div>
             <div class="check"><code>docs/index.html</code> 能搜索、播放、展示歌词/歌单，并显示登录入口。</div>
-            <div class="check">需要凭证的数据源必须明示未配置状态，而不是静默失败。</div>
+            <div class="check">需要代理/token 的数据源必须把字段放在高级设置，并明示缺少数据代理时的影响。</div>
             <div class="check">GitHub Actions 先跑测试，通过后再创建 tag 和 release。</div>
             <div class="check">主仓只更新默认记录或 submodule 指针，不复制实现代码。</div>
           </div>
         </section>
 
-        <p class="footer-note">Last updated for MusicStore SDK 0.3.0 and Store SDK OpenSpec 3.17.0.</p>
+        <p class="footer-note">Last updated for MusicStore SDK 0.4.0 and Store SDK OpenSpec 3.18.0.</p>
       </div>
     </main>
 

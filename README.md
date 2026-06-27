@@ -35,6 +35,12 @@ Connectors that declare the `login` capability may implement the single
 `configPatch`, so platform cookies and tokens remain connector-owned config
 rather than host-specific fields.
 
+For `open-url` actions, connectors may add `cookieCapture` metadata. Desktop
+hosts can use it to open the provider's official web page in an isolated login
+window, read the allowed cookie names, and pass the cookie back through
+`login({ intent: "continue", input })`. Web hosts can still render the same URL
+in an iframe/modal as a fallback.
+
 ## Publish
 
 ```bash
