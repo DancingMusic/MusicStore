@@ -67,6 +67,7 @@
 登录能力（v0.3.0）：
 - 声明 `login` capability 后，可选实现单一 `login(request)` 接口。
 - `login(request)` 可返回 `qr` / `oauth` / `browser` / `device-code` / `manual-token` / `custom` 流程动作。
+- 宿主渲染 `open-url` action 时优先使用应用内弹窗 / iframe，避免用户离开音乐播放器界面；外部浏览器仅作嵌入失败时的兜底。
 - 登录结果返回的 `configPatch` 由宿主持久化进连接器自己的 config，SDK/宿主不得定义平台专用凭证字段。
 
 ## MUST

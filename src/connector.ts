@@ -95,7 +95,7 @@ export interface MusicConnectorLoginAction {
   qrUrl?: string;
   /** Ready-to-display QR image URL, including data:image/* URLs. */
   imageUrl?: string;
-  /** External browser URL for OAuth, device-code, or manual token generation. */
+  /** Login URL for OAuth, device-code, or manual token generation. Hosts should embed it in-app when possible. */
   url?: string;
   /** Manual fields requested from the user by this connector. */
   fields?: ConnectorConfigField[];
