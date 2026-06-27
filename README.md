@@ -45,5 +45,5 @@ npm publish
 
 This repository publishes a responsibility overview page from `docs/` via GitHub Actions.
 
-- Expected URL: `https://dancingmusic.github.io/MusicStoreSdk/`
+- Expected URL: `https://dancingmusic.github.io/MusicStore/`
 - Workflow: `.github/workflows/deploy-pages.yml`
