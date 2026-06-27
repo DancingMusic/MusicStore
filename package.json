@@ -1,6 +1,6 @@
 {
   "name": "@dancingmusic/music-store",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Music Store for DancingMusic — standalone music marketplace with pluggable data sources",
   "type": "module",
   "main": "./dist/index.cjs",

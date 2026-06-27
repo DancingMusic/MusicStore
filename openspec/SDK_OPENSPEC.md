@@ -1,9 +1,9 @@
 # OpenSpec: MusicStoreSdk
 
 - Spec-ID: `music-store-sdk-openspec`
-- Version: `2.0.0`
+- Version: `2.1.0`
 - Status: `Active`
-- Last-Updated: `2026-05-17`
+- Last-Updated: `2026-06-28`
 
 ## Scope
 
@@ -11,9 +11,9 @@
 
 ## 当前状态
 
-- 包名：`@dancingmusic/music-store-sdk`
-- 版本：`v0.1.0`
-- 核心导出：`MusicTrack`、`MusicOrder`、`MusicLicense`（类型）、`MusicStoreClient`（API 客户端）
+- 包名：`@dancingmusic/music-store`
+- 版本：`v0.3.0`
+- 核心导出：`MusicTrack`、`MusicOrder`、`MusicLicense`（类型）、`MusicStoreClient`（API 客户端）、`MusicConnector` / `MusicConnectorRegistry`（动态音乐连接器接口）
 - 文档站：`docs/index.html`（支持 i18n 中英切换、客户端搜索、暗色模式）
 
 ## 核心数据模型
@@ -54,6 +54,20 @@
 - `createOrder(trackId)` — 创建订单
 - `verifyOrder(orderId)` — 验证订单
 - `getLicense(trackId)` — 获取授权
+
+## 动态连接器接口（MusicConnector）
+
+核心能力：
+- `search(query)` — 搜索音乐。
+- `getTrack(trackId)` — 获取曲目详情。
+- `getStreamUrl(trackId)` — 获取真实可播放 URL。
+- `getLyrics(trackId)` — 可选歌词能力。
+- `listPlaylists(query)` / `getPlaylistTracks(id)` — 可选歌单能力。
+
+登录能力（v0.3.0）：
+- 声明 `login` capability 后，可选实现单一 `login(request)` 接口。
+- `login(request)` 可返回 `qr` / `oauth` / `browser` / `device-code` / `manual-token` / `custom` 流程动作。
+- 登录结果返回的 `configPatch` 由宿主持久化进连接器自己的 config，SDK/宿主不得定义平台专用凭证字段。
 
 ## MUST
 

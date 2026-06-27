@@ -63,8 +63,66 @@ export type MusicConnectorCapability =
   | "stream"
   | "lyrics"
   | "playlist"
+  | "login"
   | "user-library"
   | "recommendations";
+
+export type MusicConnectorLoginStatus =
+  | "unsupported"
+  | "anonymous"
+  | "pending"
+  | "authenticated"
+  | "expired"
+  | "error";
+
+export type MusicConnectorLoginIntent = "status" | "start" | "continue" | "cancel" | "logout";
+export type MusicConnectorLoginFlow = "qr" | "oauth" | "browser" | "device-code" | "manual-token" | "custom";
+export type MusicConnectorLoginActionType = "qr" | "open-url" | "manual-input" | "message";
+
+export interface MusicConnectorLoginRequest {
+  /** What the host is asking the connector to do. Defaults to `status`. */
+  intent?: MusicConnectorLoginIntent;
+  /** Connector-scoped flow id returned by a previous login() call. */
+  flowId?: string;
+  /** Optional host-provided values for manual-input/custom flows. */
+  input?: Record<string, unknown>;
+}
+
+export interface MusicConnectorLoginAction {
+  type: MusicConnectorLoginActionType;
+  label?: string;
+  /** QR payload or URL. Hosts may render this as a QR if no imageUrl exists. */
+  qrUrl?: string;
+  /** Ready-to-display QR image URL, including data:image/* URLs. */
+  imageUrl?: string;
+  /** External browser URL for OAuth, device-code, or manual token generation. */
+  url?: string;
+  /** Manual fields requested from the user by this connector. */
+  fields?: ConnectorConfigField[];
+  message?: string;
+}
+
+export interface MusicConnectorLoginResult {
+  status: MusicConnectorLoginStatus;
+  flow?: MusicConnectorLoginFlow;
+  /** Connector-scoped flow id for follow-up login({ intent: "continue" }). */
+  flowId?: string;
+  actions?: MusicConnectorLoginAction[];
+  user?: {
+    id?: string;
+    name?: string;
+    avatarUrl?: string;
+  };
+  message?: string;
+  expiresAt?: number;
+  nextPollMs?: number;
+  /**
+   * Config updates that should be persisted by the host after a successful
+   * login. This keeps provider cookies/tokens inside connector-owned config
+   * instead of adding provider-specific fields to the host.
+   */
+  configPatch?: Record<string, unknown>;
+}
 
 /** A curated/featured playlist surfaced by the data source. */
 export interface MusicPlaylist {
@@ -115,6 +173,14 @@ export interface MusicConnector {
   getTrack(trackId: string): Promise<MusicTrack | null>;
   getStreamUrl(trackId: string): Promise<MusicStreamInfo | null>;
   getLyrics?(trackId: string): Promise<MusicLyrics | null>;
+
+  /**
+   * Optional login hook. Declare `login` in `meta.capabilities` when
+   * implemented. Platforms can use QR, OAuth, browser, device-code, manual
+   * token, or custom flows; the host only renders returned actions and sends
+   * follow-up requests back through login().
+   */
+  login?(request?: MusicConnectorLoginRequest): Promise<MusicConnectorLoginResult>;
 
   /**
    * List curated / featured / popular playlists from the data source.

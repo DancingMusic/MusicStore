@@ -1,11 +1,11 @@
-# @dancingmusic/music-store-sdk
+# @dancingmusic/music-store
 
-MusicStoreSdk is the standalone SDK for music-store domain capabilities.
+MusicStore is the standalone SDK for music catalog, connector, and client APIs.
 
 ## Install
 
 ```bash
-npm install @dancingmusic/music-store-sdk
+npm install @dancingmusic/music-store
 ```
 
 ## Build
@@ -18,7 +18,7 @@ npm run build
 ## Quick Start
 
 ```ts
-import { MusicStoreClient } from "@dancingmusic/music-store-sdk";
+import { MusicStoreClient } from "@dancingmusic/music-store";
 
 const client = new MusicStoreClient({
   baseUrl: "https://api.example.com",
@@ -27,6 +27,13 @@ const client = new MusicStoreClient({
 
 const tracks = await client.list({ page: 1, pageSize: 20 });
 ```
+
+## Connector Login
+
+Connectors that declare the `login` capability may implement the single
+`login(request)` hook. Hosts render the returned actions and persist the opaque
+`configPatch`, so platform cookies and tokens remain connector-owned config
+rather than host-specific fields.
 
 ## Publish
 
