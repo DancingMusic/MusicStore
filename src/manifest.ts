@@ -13,6 +13,12 @@ export interface ConnectorManifestArtifact {
   url: string;
   format: "esm";
   integrity?: `sha256-${string}`;
+  mirrors?: ConnectorManifestArtifactMirror[];
+}
+
+export interface ConnectorManifestArtifactMirror {
+  region: "global" | "china";
+  url: string;
 }
 
 export interface ConnectorManifestPermissions {
@@ -35,6 +41,8 @@ export interface ConnectorManifest {
   protocolVersion: string;
   capabilities: MusicConnectorCapability[];
   artifact: ConnectorManifestArtifact;
+  releaseNotesUrl?: string;
+  publishedAt?: string;
   permissions?: ConnectorManifestPermissions;
   tags?: string[];
   status: ConnectorManifestStatus;
@@ -83,10 +91,11 @@ const STATUSES = new Set<ConnectorManifestStatus>(["active", "deprecated", "unli
 const TOP_LEVEL_FIELDS = new Set([
   "schemaVersion", "id", "name", "description", "publisher", "repository",
   "homepage", "license", "version", "protocolVersion", "capabilities",
-  "artifact", "permissions", "tags", "status", "submittedAt", "updatedAt",
+  "artifact", "releaseNotesUrl", "publishedAt", "permissions", "tags", "status", "submittedAt", "updatedAt",
 ]);
 const PUBLISHER_FIELDS = new Set(["name", "url"]);
-const ARTIFACT_FIELDS = new Set(["url", "format", "integrity"]);
+const ARTIFACT_FIELDS = new Set(["url", "format", "integrity", "mirrors"]);
+const MIRROR_FIELDS = new Set(["region", "url"]);
 const PERMISSION_FIELDS = new Set(["networkOrigins", "account"]);
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SEMVER_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
@@ -167,6 +176,7 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
     issues.push({ path: "$.repository", code: "invalid_value", message: "must be an HTTPS URL" });
   }
   validateOptionalHttpsUrl(value.homepage, "$.homepage", issues);
+  validateOptionalHttpsUrl(value.releaseNotesUrl, "$.releaseNotesUrl", issues);
 
   const version = requireString(value, "version", issues);
   if (version && !SEMVER_PATTERN.test(version)) {
@@ -212,6 +222,39 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
     if (value.artifact.integrity !== undefined && (typeof value.artifact.integrity !== "string" || !/^sha256-[A-Za-z0-9+/=]+$/.test(value.artifact.integrity))) {
       issues.push({ path: "$.artifact.integrity", code: "invalid_value", message: "must be an SRI sha256 value" });
     }
+    if (value.artifact.mirrors !== undefined) {
+      if (!Array.isArray(value.artifact.mirrors) || value.artifact.mirrors.length === 0 || value.artifact.mirrors.length > 2) {
+        issues.push({ path: "$.artifact.mirrors", code: "invalid_type", message: "must contain one or two regional mirrors" });
+      } else {
+        const regions = new Set<string>();
+        const urls = new Set<string>();
+        value.artifact.mirrors.forEach((mirror, index) => {
+          const path = `$.artifact.mirrors[${index}]`;
+          if (!isRecord(mirror)) {
+            issues.push({ path, code: "invalid_type", message: "must be an object" });
+            return;
+          }
+          hasUnknownFields(mirror, MIRROR_FIELDS, path, issues);
+          if (mirror.region !== "global" && mirror.region !== "china") {
+            issues.push({ path: `${path}.region`, code: "invalid_value", message: "must equal global or china" });
+          } else if (regions.has(mirror.region)) {
+            issues.push({ path: `${path}.region`, code: "duplicate_value", message: "must not duplicate a region" });
+          } else regions.add(mirror.region);
+          if (typeof mirror.url !== "string" || !isHttpsUrl(mirror.url)) {
+            issues.push({ path: `${path}.url`, code: "invalid_value", message: "must be an HTTPS URL" });
+          } else {
+            if (urls.has(mirror.url)) issues.push({ path: `${path}.url`, code: "duplicate_value", message: "must not duplicate an artifact URL" });
+            urls.add(mirror.url);
+            if (version && (!mirror.url.includes(version) || /@(main|master|head)(?:\/|$)/i.test(mirror.url))) {
+              issues.push({ path: `${path}.url`, code: "invalid_value", message: "must identify the immutable manifest version" });
+            }
+          }
+        });
+      }
+      if (value.artifact.integrity === undefined) {
+        issues.push({ path: "$.artifact.integrity", code: "missing_field", message: "is required when mirrors are declared" });
+      }
+    }
   }
 
   if (value.permissions !== undefined) {
@@ -249,6 +292,9 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
     if (timestamp && (Number.isNaN(Date.parse(timestamp)) || !timestamp.includes("T"))) {
       issues.push({ path: `$.${field}`, code: "invalid_value", message: "must be an ISO-8601 timestamp" });
     }
+  }
+  if (value.publishedAt !== undefined && (typeof value.publishedAt !== "string" || Number.isNaN(Date.parse(value.publishedAt)) || !value.publishedAt.includes("T"))) {
+    issues.push({ path: "$.publishedAt", code: "invalid_value", message: "must be an ISO-8601 timestamp" });
   }
   if (typeof value.submittedAt === "string" && typeof value.updatedAt === "string" && Date.parse(value.updatedAt) < Date.parse(value.submittedAt)) {
     issues.push({ path: "$.updatedAt", code: "invalid_value", message: "must not be earlier than submittedAt" });

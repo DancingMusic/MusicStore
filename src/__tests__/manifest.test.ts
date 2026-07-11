@@ -38,6 +38,36 @@ describe("connector manifest validation", () => {
     expect(() => assertConnectorManifest(manifest())).not.toThrow();
   });
 
+  it("accepts pinned regional mirrors and release metadata", () => {
+    const value = manifest();
+    value.artifact.integrity = "sha256-YWJj";
+    value.artifact.mirrors = [
+      { region: "global", url: "https://global.example.com/example@v1.2.3/index.js" },
+      { region: "china", url: "https://china.example.com/example@v1.2.3/index.js" },
+    ];
+    value.releaseNotesUrl = "https://example.com/releases/1.2.3";
+    value.publishedAt = "2026-07-10T00:00:00.000Z";
+    expect(validateConnectorManifest(value)).toEqual({ valid: true, issues: [] });
+  });
+
+  it("requires integrity and unique regions for mirrors", () => {
+    const value = manifest();
+    value.artifact.mirrors = [
+      { region: "china", url: "https://one.example.com/example@v1.2.3/index.js" },
+      { region: "china", url: "https://two.example.com/example@v1.2.3/index.js" },
+    ];
+    const paths = validateConnectorManifest(value).issues.map(issue => issue.path);
+    expect(paths).toContain("$.artifact.integrity");
+    expect(paths).toContain("$.artifact.mirrors[1].region");
+  });
+
+  it("rejects a floating mirror branch", () => {
+    const value = manifest();
+    value.artifact.integrity = "sha256-YWJj";
+    value.artifact.mirrors = [{ region: "global", url: "https://cdn.example.com/example@main/index.js" }];
+    expect(validateConnectorManifest(value).issues.some(issue => issue.path === "$.artifact.mirrors[0].url")).toBe(true);
+  });
+
   it("reports all actionable validation issues", () => {
     const invalid = {
       ...manifest(),

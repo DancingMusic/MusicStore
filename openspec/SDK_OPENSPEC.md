@@ -1,7 +1,7 @@
 # OpenSpec: MusicStore Connector Registry
 
 - Spec-ID: `music-store-registry-openspec`
-- Version: `3.0.0`
+- Version: `3.1.0`
 - Status: `Active`
 - Last-Updated: `2026-07-12`
 
@@ -36,8 +36,18 @@ Each registry record MUST declare:
 - `protocolVersion`: supported MusicConnect protocol SemVer range;
 - `capabilities`: only capabilities implemented by that release;
 - `artifact`: immutable HTTPS ESM entry URL and optional SHA-256 integrity;
+- `artifact.mirrors`: optional pinned `global` and `china` mirrors. The existing
+  `artifact.url` remains canonical for manifest-v1 consumers; every mirror MUST
+  serve identical bytes covered by the single `artifact.integrity` value;
+- optional `releaseNotesUrl` and `publishedAt`: the HTTPS release notes and the
+  implementation release timestamp used by update UI. `updatedAt` remains the
+  registry-record audit timestamp;
 - `status`: `active`, `deprecated`, or `unlisted`;
 - `submittedAt` and `updatedAt`: ISO-8601 timestamps.
+
+Mirror URLs are subject to the same HTTPS, immutable-version, and no-floating-
+branch rules as the canonical artifact URL. A manifest may declare at most one
+mirror for each region.
 
 Optional `homepage`, `permissions`, and `tags` fields support discovery and
 host review. Unknown fields are rejected so typos cannot silently enter the

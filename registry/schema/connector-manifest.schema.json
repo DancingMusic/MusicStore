@@ -37,9 +37,23 @@
       "properties": {
         "url": { "type": "string", "format": "uri", "pattern": "^https://" },
         "format": { "const": "esm" },
-        "integrity": { "type": "string", "pattern": "^sha256-[A-Za-z0-9+/=]+$" }
-      }
+        "integrity": { "type": "string", "pattern": "^sha256-[A-Za-z0-9+/=]+$" },
+        "mirrors": {
+          "type": "array", "minItems": 1, "maxItems": 2,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["region", "url"],
+            "properties": {
+              "region": { "enum": ["global", "china"] },
+              "url": { "type": "string", "format": "uri", "pattern": "^https://" }
+            }
+          }
+        }
+      },
+      "if": { "required": ["mirrors"] },
+      "then": { "properties": { "integrity": true }, "required": ["integrity"] }
     },
+    "releaseNotesUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "publishedAt": { "type": "string", "format": "date-time" },
     "permissions": {
       "type": "object",
       "additionalProperties": false,
