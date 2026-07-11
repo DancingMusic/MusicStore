@@ -27,6 +27,7 @@
     "test": "vitest run",
     "validate:registry": "npm run build:package && node scripts/generate-registry.mjs --check",
     "check": "npm run typecheck && npm test && npm run build",
+    "prepare": "npm run build",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
