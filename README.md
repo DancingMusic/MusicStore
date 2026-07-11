@@ -11,7 +11,7 @@ in its own `MusicConnect-*` repository.
 ## Install
 
 ```bash
-npm install @dancingmusic/music-store
+npm install github:DancingMusic/MusicStore#af4a86628b0e0ffb373178645687fb59aa3dee07
 ```
 
 ## Registry layout
