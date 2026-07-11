@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "qq-music",
+  "name": "QQ Music",
+  "description": "QQ Music account flow and catalog access through a user-configured compatible API.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-QQMusic",
+  "homepage": "https://dancingmusic.github.io/MusicConnect-QQMusic/",
+  "license": "MIT",
+  "version": "0.5.2",
+  "protocolVersion": ">=0.1.0",
+  "capabilities": ["search", "stream", "playlist", "login"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-QQMusic@v0.5.2/dist/index.js", "format": "esm" },
+  "permissions": { "networkOrigins": ["https://y.qq.com"], "account": true },
+  "tags": ["qq-music", "playlist", "login"],
+  "status": "active",
+  "submittedAt": "2026-06-11T00:00:00.000Z",
+  "updatedAt": "2026-07-12T00:00:00.000Z"
+}

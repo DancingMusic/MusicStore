@@ -512,7 +512,7 @@
         <span class="brand-mark">MS</span>
         <span>
           <strong>MusicStore</strong>
-          <span>SDK 0.3.0 · GitHub Pages</span>
+          <span>Registry 0.4.0 · GitHub Pages</span>
         </span>
       </a>
 
@@ -546,9 +546,9 @@
       <div class="article-inner">
         <section class="doc-hero" id="overview">
           <div>
-            <span class="eyebrow">Official music connector contract</span>
+            <span class="eyebrow">Official music connector registry</span>
             <h1>MusicStore</h1>
-            <p class="lead">DancingMusic 的音乐连接器 SDK：定义统一的搜索、播放、歌词、歌单和登录契约，同时把每个平台实现保留在独立仓库和独立 GitHub Pages demo 中。</p>
+            <p class="lead">DancingMusic 的音乐连接器目录：负责实现提交、清单校验、发现和固定版本分发。统一连接器契约由 MusicConnect 定义，各平台实现保留在独立仓库。</p>
             <div class="hero-actions">
               <a class="button primary" href="#implementations">查看官方实现</a>
               <a class="button" href="https://github.com/DancingMusic/MusicStore" target="_blank" rel="noreferrer">MusicStore 仓库</a>
@@ -557,7 +557,7 @@
           </div>
           <div class="system-map" aria-label="MusicStore architecture diagram">
             <div class="node host"><strong>DancingMusic host</strong><span>播放器、连接器管理、配置持久化</span></div>
-            <div class="node sdk"><strong>MusicStore SDK</strong><span>MusicConnector 接口和 registry</span></div>
+            <div class="node sdk"><strong>MusicStore registry</strong><span>manifest、校验、提交与分发索引</span></div>
             <div class="node impl"><strong>MusicConnect-NetEase</strong><span>官方网页登录、搜索、歌词、歌单</span></div>
             <div class="node impl"><strong>MusicConnect-QQMusic</strong><span>官方网页登录、高级代理、歌单</span></div>
             <div class="node impl"><strong>MusicConnect-iTunes</strong><span>iTunes Search、MusicKit token</span></div>
@@ -651,7 +651,7 @@ if (result.configPatch) {
 
         <section class="doc-section" id="contract">
           <h2>连接器契约</h2>
-          <p class="section-intro">MusicConnect-* 实现仓库只依赖 MusicStore SDK 类型，不直接依赖 DancingMusic 宿主。每个实现都必须发布 ESM bundle、契约测试和 GitHub Pages demo。</p>
+          <p class="section-intro">MusicConnect-* 实现 MusicConnect 协议，不直接依赖 DancingMusic 宿主。每个实现必须独立发布 ESM bundle、契约测试和 GitHub Pages demo，再向 MusicStore 提交版本化 manifest。</p>
           <div class="spec-list">
             <div class="spec-item"><strong>统一类型</strong><p>实现 <code>MusicConnector</code>，返回带平台前缀的 <code>MusicTrack.id</code>。</p></div>
             <div class="spec-item"><strong>声明高级配置</strong><p>需要代理、cookie 或 token 时，通过 <code>meta.configSchema</code> 声明字段；宿主应把它放在高级设置里，普通用户优先走登录入口。</p></div>
@@ -671,21 +671,19 @@ if (result.configPatch) {
 
         <section class="doc-section" id="integration">
           <h2>宿主接入</h2>
-          <p class="section-intro">DancingMusic 不打包任何连接器实现。默认清单保存仓库、tag 和 bundle URL；运行时通过动态 ESM import 加载。</p>
+          <p class="section-intro">DancingMusic 不打包任何连接器实现。宿主读取 MusicStore 生成的 <code>dist/registry/index.json</code>，校验 manifest 后按固定 tag 动态加载 ESM。</p>
           <div class="code-block">
             <button class="copy-btn" data-copy-code="bundle-example">复制</button>
-            <pre id="bundle-example"><code>const record = {
-  id: "netease-cloud-music",
-  source: "https://github.com/DancingMusic/MusicConnect-NetEase",
-  bundleUrl: "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase@v0.5.1/dist/index.js",
-};
+            <pre id="bundle-example"><code>const { connectors } = await fetch(registryUrl).then(r =&gt; r.json());
+const record = connectors.find(item =&gt; item.id === "netease-cloud-music");
+assertConnectorManifest(record);
 
-const mod = await import(record.bundleUrl);
+const mod = await import(record.artifact.url);
 const connector = new mod.default();
 await connector.init(savedConnectorConfig);</code></pre>
           </div>
           <div class="spec-list">
-            <div class="spec-item"><strong>官方文档</strong><p>MusicStore SDK 文档固定发布到 <a class="button" href="https://dancingmusic.github.io/MusicStore/" target="_blank" rel="noreferrer">/MusicStore/</a></p></div>
+            <div class="spec-item"><strong>官方目录</strong><p>MusicStore registry 文档固定发布到 <a class="button" href="https://dancingmusic.github.io/MusicStore/" target="_blank" rel="noreferrer">/MusicStore/</a></p></div>
             <div class="spec-item"><strong>实现 demo</strong><p>每个 MusicConnect-* 仓库从自身 <code>/docs</code> 发布 Pages demo。</p></div>
             <div class="spec-item"><strong>版本锁定</strong><p>宿主默认记录使用 <code>@vX.Y.Z</code> tag；demo 页可用 <code>@main</code> 并加 cache-bust。</p></div>
           </div>
@@ -693,23 +691,23 @@ await connector.init(savedConnectorConfig);</code></pre>
 
         <section class="doc-section" id="release">
           <h2>发布检查</h2>
-          <p class="section-intro">连接器发布前先保证契约测试、bundle、demo 页面和配置说明同步，避免宿主加载到不可用实现。</p>
+          <p class="section-intro">连接器发布后提交固定版本 manifest；CI 校验 schema、权限、能力和生成索引，避免宿主加载到不可用或可变实现。</p>
           <div class="checklist">
             <div class="check">README 包含 Setup、GitHub Pages demo、固定 tag bundle URL。</div>
             <div class="check">契约测试覆盖 meta、search、getStreamUrl、null stream 和登录流程。</div>
             <div class="check"><code>docs/index.html</code> 能搜索、播放、展示歌词/歌单，并显示登录入口。</div>
             <div class="check">需要代理/token 的数据源必须把字段放在高级设置，并明示缺少数据代理时的影响。</div>
             <div class="check">GitHub Actions 先跑测试，通过后再创建 tag 和 release。</div>
-            <div class="check">主仓只更新默认记录或 submodule 指针，不复制实现代码。</div>
+            <div class="check">在 <code>registry/manifests</code> 提交记录并通过 <code>npm run check</code>，主仓不复制实现代码。</div>
           </div>
         </section>
 
-        <p class="footer-note">Last updated for MusicStore SDK 0.4.0 and Store SDK OpenSpec 3.18.0.</p>
+        <p class="footer-note">Last updated for MusicStore 0.4.0 and Connector Registry OpenSpec 3.0.0.</p>
       </div>
     </main>
 
     <aside class="toc" aria-label="Table of contents">
-      <div class="toc-card"><strong>GitHub Pages</strong><span>当前页是 SDK 文档和官方实现目录；连接器 demo 分散在各 MusicConnect-* 仓库。</span></div>
+      <div class="toc-card"><strong>GitHub Pages</strong><span>当前页是 registry 文档和官方实现目录；协议由 MusicConnect 管理，连接器 demo 位于各 MusicConnect-* 仓库。</span></div>
       <p class="toc-label">On this page</p>
       <a class="toc-link active" href="#overview">概览</a>
       <a class="toc-link" href="#implementations">官方实现目录</a>

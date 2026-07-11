@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "internet-archive",
+  "name": "Internet Archive",
+  "description": "Public and community audio from the Internet Archive catalog.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-Archive",
+  "homepage": "https://dancingmusic.github.io/MusicConnect-Archive/",
+  "license": "MIT",
+  "version": "0.4.0",
+  "protocolVersion": ">=0.1.0",
+  "capabilities": ["search", "stream", "lyrics", "playlist"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-Archive@v0.4.0/dist/index.js", "format": "esm" },
+  "permissions": { "networkOrigins": ["https://archive.org"] },
+  "tags": ["archive", "public-domain", "open-audio"],
+  "status": "active",
+  "submittedAt": "2026-06-11T00:00:00.000Z",
+  "updatedAt": "2026-07-12T00:00:00.000Z"
+}

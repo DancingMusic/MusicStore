@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "spotify",
+  "name": "Spotify Preview",
+  "description": "Spotify Web API search, playlists, metadata, and available preview clips.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-Spotify",
+  "homepage": "https://dancingmusic.github.io/MusicConnect-Spotify/",
+  "license": "MIT",
+  "version": "0.3.0",
+  "protocolVersion": ">=0.1.0",
+  "capabilities": ["search", "stream", "playlist"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-Spotify@v0.3.0/dist/index.js", "format": "esm" },
+  "permissions": { "networkOrigins": ["https://api.spotify.com", "https://accounts.spotify.com"], "account": true },
+  "tags": ["spotify", "preview", "playlist"],
+  "status": "active",
+  "submittedAt": "2026-06-11T00:00:00.000Z",
+  "updatedAt": "2026-07-12T00:00:00.000Z"
+}

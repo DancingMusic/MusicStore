@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "radio-browser",
+  "name": "Radio Browser",
+  "description": "Community-maintained internet radio station search and live streams.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-Radio",
+  "homepage": "https://dancingmusic.github.io/MusicConnect-Radio/",
+  "license": "MIT",
+  "version": "0.1.1",
+  "protocolVersion": ">=0.1.0",
+  "capabilities": ["search", "stream"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-Radio@v0.1.1/dist/index.js", "format": "esm" },
+  "permissions": { "networkOrigins": ["https://www.radio-browser.info"] },
+  "tags": ["radio", "live", "community"],
+  "status": "active",
+  "submittedAt": "2026-06-11T00:00:00.000Z",
+  "updatedAt": "2026-07-12T00:00:00.000Z"
+}

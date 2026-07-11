@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "netease-cloud-music",
+  "name": "NetEase Cloud Music",
+  "description": "NetEase Cloud Music search, playback, lyrics, playlists, and account flow.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-NetEase",
+  "homepage": "https://dancingmusic.github.io/MusicConnect-NetEase/",
+  "license": "MIT",
+  "version": "0.5.1",
+  "protocolVersion": ">=0.1.0",
+  "capabilities": ["search", "stream", "lyrics", "playlist", "login"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase@v0.5.1/dist/index.js", "format": "esm" },
+  "permissions": { "networkOrigins": ["https://music.163.com"], "account": true },
+  "tags": ["netease", "lyrics", "playlist"],
+  "status": "active",
+  "submittedAt": "2026-06-11T00:00:00.000Z",
+  "updatedAt": "2026-07-12T00:00:00.000Z"
+}

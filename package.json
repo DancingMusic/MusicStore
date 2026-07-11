@@ -1,7 +1,7 @@
 {
   "name": "@dancingmusic/music-store",
   "version": "0.4.0",
-  "description": "Music Store for DancingMusic — standalone music marketplace with pluggable data sources",
+  "description": "Connector registry, submission validation, discovery, and distribution metadata for DancingMusic",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -15,19 +15,26 @@
   },
   "files": [
     "dist",
+    "registry/schema",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "build:package": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "build": "npm run build:package && node scripts/generate-registry.mjs",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate:registry": "npm run build:package && node scripts/generate-registry.mjs --check",
+    "check": "npm run typecheck && npm test && npm run build",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
     "dancingmusic",
     "music",
     "store",
+    "connector-registry",
+    "manifest",
     "sdk"
   ],
   "publishConfig": {

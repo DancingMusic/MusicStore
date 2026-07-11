@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "itunes",
+  "name": "iTunes Preview",
+  "description": "Apple iTunes catalog search, charts, and official preview clips.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-iTunes",
+  "homepage": "https://dancingmusic.github.io/MusicConnect-iTunes/",
+  "license": "MIT",
+  "version": "0.5.0",
+  "protocolVersion": ">=0.1.0",
+  "capabilities": ["search", "stream", "lyrics", "playlist", "login"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-iTunes@v0.5.0/dist/index.js", "format": "esm" },
+  "permissions": { "networkOrigins": ["https://itunes.apple.com"], "account": true },
+  "tags": ["apple", "itunes", "preview"],
+  "status": "active",
+  "submittedAt": "2026-06-11T00:00:00.000Z",
+  "updatedAt": "2026-07-12T00:00:00.000Z"
+}

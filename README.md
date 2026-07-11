@@ -1,6 +1,12 @@
 # @dancingmusic/music-store
 
-MusicStore is the standalone SDK for music catalog, connector, and client APIs.
+MusicStore is DancingMusic's public catalog for independently released music
+connectors. It defines the submission manifest, validates registry changes,
+provides typed discovery APIs, and builds a distributable connector index.
+
+It does not contain connector implementation source. The connector contract is
+owned by `MusicConnect`, and each platform implementation is built and tagged
+in its own `MusicConnect-*` repository.
 
 ## Install
 
@@ -8,48 +14,127 @@ MusicStore is the standalone SDK for music catalog, connector, and client APIs.
 npm install @dancingmusic/music-store
 ```
 
-## Build
+## Registry layout
+
+```text
+registry/
+├── manifests/                         # reviewed source records
+└── schema/connector-manifest.schema.json
+
+dist/registry/
+├── index.json                         # generated public connector index
+└── connector-manifest.schema.json
+```
+
+The generated index is sorted by connector ID and uses pinned release artifact
+URLs. Run the complete validation pipeline with:
 
 ```bash
-npm install
+npm ci
+npm run check
+```
+
+Useful focused commands:
+
+```bash
+npm run typecheck
+npm test
+npm run validate:registry
 npm run build
 ```
 
-## Quick Start
+## Discover manifests in code
 
 ```ts
-import { MusicStoreClient } from "@dancingmusic/music-store";
+import {
+  ConnectorManifestRegistry,
+  assertConnectorManifest,
+} from "@dancingmusic/music-store";
 
-const client = new MusicStoreClient({
-  baseUrl: "https://api.example.com",
-  token: "your-token"
+const response = await fetch(
+  "https://cdn.jsdelivr.net/npm/@dancingmusic/music-store/dist/registry/index.json",
+);
+const { connectors } = await response.json();
+
+for (const connector of connectors) {
+  assertConnectorManifest(connector);
+}
+
+const registry = new ConnectorManifestRegistry(connectors);
+const playlistConnectors = registry.list({
+  status: "active",
+  capability: "playlist",
 });
-
-const tracks = await client.list({ page: 1, pageSize: 20 });
 ```
 
-## Connector Login
+`ConnectorManifestRegistry` manages distribution records only. It is distinct
+from the compatibility `MusicConnectorRegistry`, which manages live connector
+instances inside a host process.
 
-Connectors that declare the `login` capability may implement the single
-`login(request)` hook. Hosts render the returned actions and persist the opaque
-`configPatch`, so platform cookies and tokens remain connector-owned config
-rather than host-specific fields.
+## Submit or update a connector
 
-For `open-url` actions, connectors may add `cookieCapture` metadata. Desktop
-hosts can use it to open the provider's official web page in an isolated login
-window, read the allowed cookie names, and pass the cookie back through
-`login({ intent: "continue", input })`. Web hosts can still render the same URL
-in an iframe/modal as a fallback.
+1. Implement the `MusicConnect` protocol in an independent repository.
+2. Test and tag an immutable SemVer release.
+3. Publish a browser-loadable ESM artifact for that exact tag.
+4. Add one JSON file under `registry/manifests/`, following
+   `registry/schema/connector-manifest.schema.json`.
+5. Declare only capabilities and network/account permissions the release uses.
+6. Run `npm run check` and include the generated-index result in review.
 
-## Publish
+Reviewers verify repository ownership, license, protocol compatibility,
+capabilities, permissions, and the pinned artifact URL. Never submit cookies,
+tokens, API secrets, signing material, or mutable `@main` distribution URLs.
 
-```bash
-npm publish
+## Manifest v1
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "example-music",
+  "name": "Example Music",
+  "description": "Example connector.",
+  "publisher": { "name": "Example" },
+  "repository": "https://github.com/example/MusicConnect-Example",
+  "license": "MIT",
+  "version": "1.0.0",
+  "protocolVersion": ">=0.1.0",
+  "capabilities": ["search", "stream"],
+  "artifact": {
+    "url": "https://cdn.jsdelivr.net/gh/example/MusicConnect-Example@v1.0.0/dist/index.js",
+    "format": "esm"
+  },
+  "permissions": {
+    "networkOrigins": ["https://api.example.com"],
+    "account": false
+  },
+  "status": "active",
+  "submittedAt": "2026-07-12T00:00:00.000Z",
+  "updatedAt": "2026-07-12T00:00:00.000Z"
+}
 ```
+
+See [`openspec/SDK_OPENSPEC.md`](openspec/SDK_OPENSPEC.md) for the normative
+field and lifecycle requirements.
+
+## Runtime compatibility
+
+The package continues to export the existing runtime connector surface used by
+current hosts and connectors:
+
+- `MusicConnector` and related track, login, lyrics, and playlist types;
+- `MusicConnectorRegistry` with its existing registration and activation API;
+- `MusicStoreClient` and the legacy track/order types.
+
+These exports are retained for compatibility while protocol ownership is
+migrated cleanly to `MusicConnect`; they are not the new Store domain model.
 
 ## GitHub Pages
 
-This repository publishes a responsibility overview page from `docs/` via GitHub Actions.
+The responsibility overview is published from `docs/` by
+`.github/workflows/deploy-pages.yml` at:
 
-- Expected URL: `https://dancingmusic.github.io/MusicStore/`
-- Workflow: `.github/workflows/deploy-pages.yml`
+https://dancingmusic.github.io/MusicStore/
+
+## License
+
+MIT

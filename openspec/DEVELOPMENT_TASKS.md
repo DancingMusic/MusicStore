@@ -1,27 +1,27 @@
-# MusicStoreSdk Tasks
+# MusicStore Connector Registry Tasks
 
-- Last-Updated: `2026-05-17`
+- Last-Updated: `2026-07-12`
 
-## Milestone A — 类型与骨架 ✅
+## Milestone A — Registry foundation
 
-- [x] 定义核心类型（`MusicTrack`/`MusicOrder`/`MusicLicense`）
-- [x] API 客户端骨架（`MusicStoreClient`）
-- [x] 统一导出入口 `src/index.ts`
-- [x] 文档站 `docs/index.html`（i18n/搜索/暗色模式）
-- [x] OpenSpec 与任务文档
+- [x] Replace the obsolete track/order marketplace model in OpenSpec with
+  connector registry, submission, validation, and distribution ownership.
+- [x] Define the connector manifest v1 TypeScript model and JSON Schema.
+- [x] Implement structured validation and assertion helpers.
+- [x] Implement a typed manifest registry with deterministic discovery.
+- [x] Preserve the existing `MusicConnectorRegistry` public API.
 
-## Milestone B — API 完善
+## Milestone B — Curated distribution
 
-- [ ] 完善 HTTP 层实现（鉴权 token 管理、请求超时、错误码映射）
-- [ ] 实现重试策略（指数退避 + 可配置上限）
-- [ ] 实现 `list` / `get` / `createOrder` / `verifyOrder` / `getLicense` 完整逻辑
-- [ ] 支持流派（genre）筛选和搜索
-- [ ] 添加请求/响应拦截器支持
-- [ ] README 有完整接口示例与配置说明
+- [x] Add manifests for the official independent connector repositories.
+- [x] Generate `dist/registry/index.json` deterministically from source records.
+- [x] Document connector submission and review requirements.
+- [x] Add registry validation, generation, and compatibility tests.
 
-## Milestone C — 质量保障
+## Milestone C — Automation and maintenance
 
-- [ ] 添加单测（vitest）覆盖核心流程
-- [ ] 添加契约测试（mock server 验证请求/响应格式）
-- [ ] 发布 `v0.1.x` 正式标签
-- [ ] CI 流水线配置（lint + typecheck + test）
+- [x] Run typecheck, tests, registry validation, and build in CI.
+- [ ] Add automated artifact reachability and integrity verification.
+- [ ] Define a reviewed deprecation/removal policy and migration window.
+- [ ] Move protocol compatibility exports to `MusicConnect` after host and all
+  connectors have migrated; removal requires a separate major release.
