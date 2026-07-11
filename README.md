@@ -133,7 +133,7 @@ migrated cleanly to `MusicConnect`; they are not the new Store domain model.
 The responsibility overview is published from `docs/` by
 `.github/workflows/deploy-pages.yml` at:
 
-https://dancingmusic.github.io/MusicStore/
+https://dancingmusic.github.io/docs/connectors/
 
 ## License
 

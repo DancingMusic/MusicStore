@@ -24,6 +24,10 @@ MusicStore does not own connector protocol types or concrete platform source.
 The protocol belongs to `MusicConnect`; implementations remain in independent
 `MusicConnect-*` repositories.
 
+Long-form documentation is published by `DancingMusic/docs` at
+`https://dancingmusic.github.io/docs/ecosystem/stores`. This repository keeps
+the schema and registry source of truth; its legacy Pages root only redirects.
+
 ## Connector manifest v1
 
 Each registry record MUST declare:

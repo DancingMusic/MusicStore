@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dancingmusic.github.io/MusicStore/schema/connector-manifest-v1.json",
+  "$id": "https://raw.githubusercontent.com/DancingMusic/MusicStore/main/registry/schema/connector-manifest.schema.json",
   "title": "DancingMusic connector manifest",
   "type": "object",
   "additionalProperties": false,
