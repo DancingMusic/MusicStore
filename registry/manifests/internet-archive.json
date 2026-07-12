@@ -4,7 +4,7 @@
   "familyId": "internet-archive",
   "variant": "anonymous",
   "authRequirement": "none",
-  "platforms": ["web", "desktop"],
+  "platforms": ["web", "desktop", "ios", "android"],
   "name": "Internet Archive",
   "description": "Public and community audio from the Internet Archive catalog.",
   "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },

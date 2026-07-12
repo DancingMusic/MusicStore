@@ -4,7 +4,7 @@
   "familyId": "itunes",
   "variant": "anonymous",
   "authRequirement": "none",
-  "platforms": ["web", "desktop"],
+  "platforms": ["web", "desktop", "ios", "android"],
   "name": "iTunes Preview",
   "description": "Apple iTunes catalog search, charts, and official preview clips.",
   "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },

@@ -96,7 +96,7 @@ tokens, API secrets, signing material, or mutable `@main` distribution URLs.
   "familyId": "example-music",
   "variant": "anonymous",
   "authRequirement": "none",
-  "platforms": ["web", "desktop"],
+  "platforms": ["web", "desktop", "ios", "android"],
   "name": "Example Music",
   "description": "Example connector.",
   "publisher": { "name": "Example" },
@@ -122,6 +122,13 @@ tokens, API secrets, signing material, or mutable `@main` distribution URLs.
 
 See [`openspec/SDK_OPENSPEC.md`](openspec/SDK_OPENSPEC.md) for the normative
 field and lifecycle requirements.
+
+`ios` and `android` are declared only for releases reviewed on the native
+Capacitor host. A browser-compatible bundle alone is not enough: desktop-only
+cookie capture, token handoff, or an unvalidated user gateway keeps a connector
+off native discovery. The initial mobile set is iTunes Preview, Internet
+Archive, and Radio Browser; other manifests remain Web/Desktop until their
+mobile setup and authorization paths are verified.
 
 ## Runtime compatibility
 

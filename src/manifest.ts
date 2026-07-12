@@ -1,9 +1,10 @@
 import type { MusicConnectorCapability } from "./connector";
-import type { MusicConnectorAuthRequirement, MusicConnectorHost, MusicConnectorVariant } from "./connector";
+import type { MusicConnectorAuthRequirement, MusicConnectorVariant } from "./connector";
 
 export const CONNECTOR_MANIFEST_SCHEMA_VERSION = 1 as const;
 
 export type ConnectorManifestStatus = "active" | "deprecated" | "unlisted";
+export type ConnectorManifestPlatform = "web" | "desktop" | "ios" | "android";
 
 export interface ConnectorManifestPublisher {
   name: string;
@@ -35,7 +36,7 @@ export interface ConnectorManifest {
   familyId: string;
   variant: MusicConnectorVariant;
   authRequirement: MusicConnectorAuthRequirement;
-  platforms: MusicConnectorHost[];
+  platforms: ConnectorManifestPlatform[];
   name: string;
   description: string;
   publisher: ConnectorManifestPublisher;
@@ -195,8 +196,9 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
   else if (!["none", "optional", "required"].includes(String(value.authRequirement))) issues.push({ path: "$.authRequirement", code: "invalid_value", message: "must equal none, optional, or required" });
   if (value.platforms === undefined) issues.push({ path: "$.platforms", code: "missing_field", message: "field is required" });
   else {
-    if (!Array.isArray(value.platforms) || value.platforms.length === 0 || value.platforms.some(item => item !== "web" && item !== "desktop")) {
-      issues.push({ path: "$.platforms", code: "invalid_value", message: "must contain web and/or desktop" });
+    const supportedPlatforms = new Set<ConnectorManifestPlatform>(["web", "desktop", "ios", "android"]);
+    if (!Array.isArray(value.platforms) || value.platforms.length === 0 || value.platforms.some(item => typeof item !== "string" || !supportedPlatforms.has(item as ConnectorManifestPlatform))) {
+      issues.push({ path: "$.platforms", code: "invalid_value", message: "must contain web, desktop, ios, and/or android" });
     } else if (new Set(value.platforms).size !== value.platforms.length) {
       issues.push({ path: "$.platforms", code: "duplicate_value", message: "must not contain duplicate hosts" });
     }

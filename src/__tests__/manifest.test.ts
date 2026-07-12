@@ -45,6 +45,27 @@ describe("connector manifest validation", () => {
     expect(() => assertConnectorManifest(manifest())).not.toThrow();
   });
 
+  it("accepts native mobile platforms", () => {
+    const value = manifest();
+    value.platforms = ["ios", "android"];
+
+    expect(validateConnectorManifest(value)).toEqual({ valid: true, issues: [] });
+  });
+
+  it("rejects unknown platforms and duplicate hosts", () => {
+    const unknown = { ...manifest(), platforms: ["web", "watchos"] };
+    expect(validateConnectorManifest(unknown).issues).toContainEqual(expect.objectContaining({
+      path: "$.platforms",
+      code: "invalid_value",
+    }));
+
+    const duplicate = { ...manifest(), platforms: ["android", "android"] };
+    expect(validateConnectorManifest(duplicate).issues).toContainEqual(expect.objectContaining({
+      path: "$.platforms",
+      code: "duplicate_value",
+    }));
+  });
+
   it("accepts pinned regional mirrors and release metadata", () => {
     const value = manifest();
     value.artifact.integrity = VALID_SRI;
