@@ -29,3 +29,6 @@ jobs:
 
       - name: Verify generated registry artifact exists
         run: test -f dist/registry/index.json
+
+      - name: Verify every published connector artifact against SRI
+        run: npm run verify:artifacts
