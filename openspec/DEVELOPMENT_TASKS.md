@@ -36,3 +36,12 @@
   NetEase, QQ Music, or KuGou gateway variants on native hosts.
 - [ ] Implement and validate a native authorization flow before enabling the
   Spotify account variant on native hosts.
+
+## Milestone E — Account connector variants
+
+- [x] Register the independent NetEase Cloud Music account connector without
+  replacing the anonymous family member.
+- [x] Register the independent QQ Music account connector without replacing the
+  anonymous family member.
+- [x] Verify both releases use host-managed official login flows and never send
+  captured credentials to configurable catalog gateways.

@@ -80,6 +80,23 @@ NetEase, QQ Music, and KuGou, plus the token-based Spotify account variant,
 remain `web`/`desktop` until their mobile configuration or authorization flow
 is implemented and tested.
 
+### Account connector variants
+
+Anonymous and account implementations for the same music platform are separate
+records with a shared `familyId` and distinct immutable `id` values. An account
+record MUST declare `variant: account`, `authRequirement: required`, the
+`login` capability and `permissions.account: true`. Publishing an account
+record never replaces or upgrades the anonymous record in place; users may
+install either variant and the host keeps their configuration and credential
+namespaces isolated.
+
+For mainland platforms without an official public API, an account connector
+may coordinate an official browser/QR login through the MusicConnect login
+contract, but it MUST NOT send captured cookies to a configurable catalog
+gateway or include them in request URLs. Store review rejects an account
+manifest whose implementation claims authenticated catalog capabilities without
+a declared, trusted and bounded credential-processing path.
+
 ## Registry behavior
 
 - Manifest IDs are unique.
