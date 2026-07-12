@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "qq-music-account",
+  "familyId": "qq-music",
+  "variant": "account",
+  "authRequirement": "required",
+  "platforms": ["desktop"],
+  "name": "QQ Music Account",
+  "description": "QQ Music account login through the official web QR page with host-owned secure cookie capture.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-QQMusic-Account",
+  "homepage": "https://dancingmusic.github.io/MusicConnect-QQMusic-Account/",
+  "license": "MIT",
+  "version": "0.1.0",
+  "protocolVersion": ">=0.2.0",
+  "capabilities": ["search", "stream", "playlist", "login"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-QQMusic-Account@v0.1.0/dist/index.js", "format": "esm", "integrity": "sha256-6E6XPZke6wJ0X6V5Y+H+wszd09yyfpAxEys6AZ6ZgLo=" },
+  "permissions": { "networkOrigins": [], "account": true },
+  "tags": ["qq-music", "account", "official-web-login", "qr-login"],
+  "status": "active",
+  "submittedAt": "2026-07-12T14:15:00.000Z",
+  "updatedAt": "2026-07-12T14:15:00.000Z"
+}

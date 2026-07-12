@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "netease-cloud-music-account",
+  "familyId": "netease-cloud-music",
+  "variant": "account",
+  "authRequirement": "required",
+  "platforms": ["desktop"],
+  "name": "NetEase Cloud Music Account",
+  "description": "NetEase account login through the official web QR page with host-owned secure cookie capture.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-NetEase-Account",
+  "homepage": "https://dancingmusic.github.io/MusicConnect-NetEase-Account/",
+  "license": "MIT",
+  "version": "0.1.0",
+  "protocolVersion": ">=0.2.0",
+  "capabilities": ["search", "stream", "lyrics", "playlist", "login"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase-Account@v0.1.0/dist/index.js", "format": "esm", "integrity": "sha256-r2dox1d5tu+dIF+zuNSJzNDFVCVPxXUhuSdHYWn70xI=" },
+  "permissions": { "networkOrigins": [], "account": true },
+  "tags": ["netease", "account", "official-web-login", "qr-login", "desktop"],
+  "status": "active",
+  "submittedAt": "2026-07-12T14:15:00.000Z",
+  "updatedAt": "2026-07-12T14:15:00.000Z"
+}

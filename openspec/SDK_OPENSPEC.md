@@ -1,7 +1,7 @@
 # OpenSpec: MusicStore Connector Registry
 
 - Spec-ID: `music-store-registry-openspec`
-- Version: `3.1.0`
+- Version: `3.2.0`
 - Status: `Active`
 - Last-Updated: `2026-07-12`
 
@@ -56,6 +56,21 @@ mirror for each region.
 Optional `homepage`, `permissions`, and `tags` fields support discovery and
 host review. Unknown fields are rejected so typos cannot silently enter the
 distribution index.
+
+Anonymous and account implementations for the same music platform are separate
+records with a shared `familyId` and distinct immutable `id` values. An account
+record MUST declare `variant: account`, `authRequirement: required`, the
+`login` capability and `permissions.account: true`. Publishing an account
+record never replaces or upgrades the anonymous record in place; users may
+install either variant and the host keeps their configuration and credential
+namespaces isolated.
+
+For mainland platforms without an official public API, an account connector
+may coordinate an official browser/QR login through the MusicConnect login
+contract, but it MUST NOT send captured cookies to a configurable catalog
+gateway or include them in request URLs. Store review rejects an account
+manifest whose implementation claims authenticated catalog capabilities without
+a declared, trusted and bounded credential-processing path.
 
 ## Registry behavior
 
