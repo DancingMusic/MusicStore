@@ -1,6 +1,6 @@
 {
   "name": "@dancingmusic/music-store",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Connector registry, submission validation, discovery, and distribution metadata for DancingMusic",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -42,6 +42,9 @@
     "access": "public"
   },
   "license": "MIT",
+  "dependencies": {
+    "@dancingmusic/music-connect": "github:DancingMusic/MusicConnect#b90bcabdeff428eb1b1bf5a772c40f2c5e4f5013"
+  },
   "devDependencies": {
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",

@@ -1,4 +1,5 @@
 import type { MusicConnectorCapability } from "./connector";
+import type { MusicConnectorAuthRequirement, MusicConnectorHost, MusicConnectorVariant } from "./connector";
 
 export const CONNECTOR_MANIFEST_SCHEMA_VERSION = 1 as const;
 
@@ -31,6 +32,10 @@ export interface ConnectorManifestPermissions {
 export interface ConnectorManifest {
   schemaVersion: typeof CONNECTOR_MANIFEST_SCHEMA_VERSION;
   id: string;
+  familyId: string;
+  variant: MusicConnectorVariant;
+  authRequirement: MusicConnectorAuthRequirement;
+  platforms: MusicConnectorHost[];
   name: string;
   description: string;
   publisher: ConnectorManifestPublisher;
@@ -92,6 +97,7 @@ const TOP_LEVEL_FIELDS = new Set([
   "schemaVersion", "id", "name", "description", "publisher", "repository",
   "homepage", "license", "version", "protocolVersion", "capabilities",
   "artifact", "releaseNotesUrl", "publishedAt", "permissions", "tags", "status", "submittedAt", "updatedAt",
+  "familyId", "variant", "authRequirement", "platforms",
 ]);
 const PUBLISHER_FIELDS = new Set(["name", "url"]);
 const ARTIFACT_FIELDS = new Set(["url", "format", "integrity", "mirrors"]);
@@ -166,6 +172,22 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
   const id = requireString(value, "id", issues);
   if (id && !ID_PATTERN.test(id)) {
     issues.push({ path: "$.id", code: "invalid_value", message: "must be a lower-case kebab-case identifier" });
+  }
+  const familyId = requireString(value, "familyId", issues);
+  if (familyId && !ID_PATTERN.test(familyId)) {
+    issues.push({ path: "$.familyId", code: "invalid_value", message: "must be a lower-case kebab-case identifier" });
+  }
+  if (value.variant === undefined) issues.push({ path: "$.variant", code: "missing_field", message: "field is required" });
+  else if (!["anonymous", "account", "hybrid"].includes(String(value.variant))) issues.push({ path: "$.variant", code: "invalid_value", message: "must equal anonymous, account, or hybrid" });
+  if (value.authRequirement === undefined) issues.push({ path: "$.authRequirement", code: "missing_field", message: "field is required" });
+  else if (!["none", "optional", "required"].includes(String(value.authRequirement))) issues.push({ path: "$.authRequirement", code: "invalid_value", message: "must equal none, optional, or required" });
+  if (value.platforms === undefined) issues.push({ path: "$.platforms", code: "missing_field", message: "field is required" });
+  else {
+    if (!Array.isArray(value.platforms) || value.platforms.length === 0 || value.platforms.some(item => item !== "web" && item !== "desktop")) {
+      issues.push({ path: "$.platforms", code: "invalid_value", message: "must contain web and/or desktop" });
+    } else if (new Set(value.platforms).size !== value.platforms.length) {
+      issues.push({ path: "$.platforms", code: "duplicate_value", message: "must not contain duplicate hosts" });
+    }
   }
   requireString(value, "name", issues);
   requireString(value, "description", issues);
@@ -279,12 +301,28 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
     }
   }
 
+  const capabilities = Array.isArray(value.capabilities) ? value.capabilities : [];
+  const hasLogin = capabilities.includes("login");
+  const accountPermission = isRecord(value.permissions) && value.permissions.account === true;
+  if (value.variant === "anonymous" && (value.authRequirement !== "none" || hasLogin)) {
+    issues.push({ path: "$.variant", code: "invalid_value", message: "anonymous variants require authRequirement none and no login capability" });
+  }
+  if (value.variant === "account" && (value.authRequirement !== "required" || !hasLogin || !accountPermission)) {
+    issues.push({ path: "$.variant", code: "invalid_value", message: "account variants require login capability, required auth, and account permission" });
+  }
+  if ((value.authRequirement === "optional" || value.authRequirement === "required") && !hasLogin) {
+    issues.push({ path: "$.authRequirement", code: "invalid_value", message: "optional or required auth needs the login capability" });
+  }
+
   if (value.tags !== undefined && (!Array.isArray(value.tags) || value.tags.some(tag => typeof tag !== "string" || tag.trim() === ""))) {
     issues.push({ path: "$.tags", code: "invalid_type", message: "must be an array of non-empty strings" });
   }
 
   if (typeof value.status !== "string" || !STATUSES.has(value.status as ConnectorManifestStatus)) {
     issues.push({ path: "$.status", code: value.status === undefined ? "missing_field" : "invalid_value", message: "must be active, deprecated, or unlisted" });
+  }
+  if (value.status === "active" && (!isRecord(value.artifact) || typeof value.artifact.integrity !== "string")) {
+    issues.push({ path: "$.artifact.integrity", code: "missing_field", message: "is required for active connectors" });
   }
 
   for (const field of ["submittedAt", "updatedAt"] as const) {

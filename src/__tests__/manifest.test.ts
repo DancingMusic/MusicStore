@@ -11,6 +11,10 @@ function manifest(id = "example"): ConnectorManifest {
   return {
     schemaVersion: 1,
     id,
+    familyId: id,
+    variant: "anonymous",
+    authRequirement: "none",
+    platforms: ["web", "desktop"],
     name: "Example connector",
     description: "A connector used by the registry test suite.",
     publisher: { name: "Example publisher", url: "https://example.com" },
@@ -23,6 +27,7 @@ function manifest(id = "example"): ConnectorManifest {
     artifact: {
       url: `https://cdn.example.com/${id}@v1.2.3/index.js`,
       format: "esm",
+      integrity: "sha256-YWJj",
     },
     permissions: { networkOrigins: ["https://api.example.com"] },
     tags: ["example"],
@@ -52,6 +57,7 @@ describe("connector manifest validation", () => {
 
   it("requires integrity and unique regions for mirrors", () => {
     const value = manifest();
+    delete value.artifact.integrity;
     value.artifact.mirrors = [
       { region: "china", url: "https://one.example.com/example@v1.2.3/index.js" },
       { region: "china", url: "https://two.example.com/example@v1.2.3/index.js" },
@@ -66,6 +72,15 @@ describe("connector manifest validation", () => {
     value.artifact.integrity = "sha256-YWJj";
     value.artifact.mirrors = [{ region: "global", url: "https://cdn.example.com/example@main/index.js" }];
     expect(validateConnectorManifest(value).issues.some(issue => issue.path === "$.artifact.mirrors[0].url")).toBe(true);
+  });
+
+  it("requires integrity for every active connector", () => {
+    const value = manifest();
+    delete value.artifact.integrity;
+    expect(validateConnectorManifest(value).issues).toContainEqual(expect.objectContaining({
+      path: "$.artifact.integrity",
+      code: "missing_field",
+    }));
   });
 
   it("reports all actionable validation issues", () => {
@@ -89,6 +104,14 @@ describe("connector manifest validation", () => {
       "$.extra",
     ]));
     expect(() => assertConnectorManifest(invalid)).toThrow(ConnectorManifestValidationError);
+  });
+
+  it("rejects contradictory anonymous and account variants", () => {
+    const anonymous = { ...manifest(), capabilities: ["search", "login"], permissions: { account: true } };
+    expect(validateConnectorManifest(anonymous).issues.some(issue => issue.path === "$.variant")).toBe(true);
+
+    const account = { ...manifest(), variant: "account", authRequirement: "required" };
+    expect(validateConnectorManifest(account).issues.some(issue => issue.path === "$.variant")).toBe(true);
   });
 });
 

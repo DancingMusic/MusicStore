@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "kugou-music",
+  "familyId": "kugou-music",
+  "variant": "anonymous",
+  "authRequirement": "none",
+  "platforms": ["web", "desktop"],
+  "name": "KuGou Music",
+  "description": "Anonymous KuGou catalog access through a user-configured trusted HTTPS gateway.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-KuGou",
+  "homepage": "https://dancingmusic.github.io/docs/connectors/kugou/",
+  "license": "MIT",
+  "version": "0.1.0",
+  "protocolVersion": ">=0.2.0",
+  "capabilities": ["search", "stream", "lyrics", "playlist"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-KuGou@v0.1.0/dist/index.js", "format": "esm", "integrity": "sha256-o00MxZK94YSorRwAgtQgLd/Hb3zCXEJLXSYGptCFdxI=" },
+  "permissions": { "networkOrigins": [], "account": false },
+  "tags": ["kugou", "anonymous", "self-hosted-gateway", "lyrics", "playlist"],
+  "status": "active",
+  "submittedAt": "2026-07-12T00:00:00.000Z",
+  "updatedAt": "2026-07-12T00:00:00.000Z"
+}

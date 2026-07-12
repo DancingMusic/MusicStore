@@ -11,8 +11,10 @@ in its own `MusicConnect-*` repository.
 ## Install
 
 ```bash
-npm install github:DancingMusic/MusicStore#af4a86628b0e0ffb373178645687fb59aa3dee07
+npm install github:DancingMusic/MusicStore
 ```
+
+应用和发布构建必须把解析结果固定到 lockfile 中的完整提交哈希；上面的写法仅用于首次安装。
 
 ## Registry layout
 
@@ -82,7 +84,7 @@ instances inside a host process.
 6. Run `npm run check` and include the generated-index result in review.
 
 Reviewers verify repository ownership, license, protocol compatibility,
-capabilities, permissions, and the pinned artifact URL. Never submit cookies,
+capabilities, permissions, the pinned artifact URL, and its SHA-256 integrity. Never submit cookies,
 tokens, API secrets, signing material, or mutable `@main` distribution URLs.
 
 ## Manifest v1
@@ -91,17 +93,22 @@ tokens, API secrets, signing material, or mutable `@main` distribution URLs.
 {
   "schemaVersion": 1,
   "id": "example-music",
+  "familyId": "example-music",
+  "variant": "anonymous",
+  "authRequirement": "none",
+  "platforms": ["web", "desktop"],
   "name": "Example Music",
   "description": "Example connector.",
   "publisher": { "name": "Example" },
   "repository": "https://github.com/example/MusicConnect-Example",
   "license": "MIT",
   "version": "1.0.0",
-  "protocolVersion": ">=0.1.0",
+  "protocolVersion": ">=0.2.0",
   "capabilities": ["search", "stream"],
   "artifact": {
     "url": "https://cdn.jsdelivr.net/gh/example/MusicConnect-Example@v1.0.0/dist/index.js",
-    "format": "esm"
+    "format": "esm",
+    "integrity": "sha256-BASE64_SHA256_OF_DIST"
   },
   "permissions": {
     "networkOrigins": ["https://api.example.com"],
