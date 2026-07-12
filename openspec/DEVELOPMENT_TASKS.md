@@ -25,3 +25,12 @@
 - [ ] Define a reviewed deprecation/removal policy and migration window.
 - [ ] Move protocol compatibility exports to `MusicConnect` after host and all
   connectors have migrated; removal requires a separate major release.
+
+## Milestone D — Account connector variants
+
+- [x] Register the independent NetEase Cloud Music account connector without
+  replacing the anonymous family member.
+- [x] Register the independent QQ Music account connector without replacing the
+  anonymous family member.
+- [x] Verify both releases use host-managed official login flows and never send
+  captured credentials to configurable catalog gateways.
