@@ -41,6 +41,26 @@ describe("MusicConnectorRegistry", () => {
     await expect(registry.register(c2)).rejects.toThrow('already registered');
   });
 
+  it("replaces atomically and keeps a working connector when init fails", async () => {
+    const current = createMockConnector("atomic");
+    const broken = createMockConnector("atomic");
+    broken.init = vi.fn().mockRejectedValue(new Error("broken init"));
+    await registry.register(current);
+    registry.activate("atomic");
+
+    await expect(registry.replace(broken)).rejects.toThrow("broken init");
+    expect(registry.get("atomic")).toBe(current);
+    expect(registry.active).toBe(current);
+    expect(current.dispose).not.toHaveBeenCalled();
+
+    const replacement = createMockConnector("atomic");
+    await registry.replace(replacement, { region: "cn" });
+    expect(registry.get("atomic")).toBe(replacement);
+    expect(registry.active).toBe(replacement);
+    expect(replacement.init).toHaveBeenCalledWith({ region: "cn" });
+    expect(current.dispose).toHaveBeenCalledOnce();
+  });
+
   it("activates a connector", async () => {
     const connector = createMockConnector();
     await registry.register(connector);

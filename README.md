@@ -148,4 +148,4 @@ https://dancingmusic.github.io/MusicStore/registry/index.json
 
 ## License
 
-MIT
+Apache-2.0

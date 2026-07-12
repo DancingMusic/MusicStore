@@ -113,7 +113,19 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isHttpsUrl(value: string): boolean {
   try {
-    return new URL(value).protocol === "https:";
+    const url = new URL(value);
+    return url.protocol === "https:" && !url.username && !url.password;
+  } catch {
+    return false;
+  }
+}
+
+function artifactUrlPinsVersion(rawUrl: string, version: string): boolean {
+  try {
+    const url = new URL(rawUrl);
+    const escapedVersion = version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(?:@|/)(?:v)?${escapedVersion}(?:/|$)`, "i").test(url.pathname)
+      && !/(?:@|\/)(?:main|master|head)(?:\/|$)/i.test(url.pathname);
   } catch {
     return false;
   }
@@ -237,11 +249,11 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
     hasUnknownFields(value.artifact, ARTIFACT_FIELDS, "$.artifact", issues);
     const url = requireString(value.artifact, "url", issues, "$.artifact");
     if (url && !isHttpsUrl(url)) issues.push({ path: "$.artifact.url", code: "invalid_value", message: "must be an HTTPS URL" });
-    if (url && version && (!url.includes(version) || /@(main|master|head)(?:\/|$)/i.test(url))) {
+    if (url && version && !artifactUrlPinsVersion(url, version)) {
       issues.push({ path: "$.artifact.url", code: "invalid_value", message: "must identify the immutable manifest version" });
     }
     if (value.artifact.format !== "esm") issues.push({ path: "$.artifact.format", code: "invalid_value", message: "must equal esm" });
-    if (value.artifact.integrity !== undefined && (typeof value.artifact.integrity !== "string" || !/^sha256-[A-Za-z0-9+/=]+$/.test(value.artifact.integrity))) {
+    if (value.artifact.integrity !== undefined && (typeof value.artifact.integrity !== "string" || !/^sha256-[A-Za-z0-9+/]{43}=$/.test(value.artifact.integrity))) {
       issues.push({ path: "$.artifact.integrity", code: "invalid_value", message: "must be an SRI sha256 value" });
     }
     if (value.artifact.mirrors !== undefined) {
@@ -267,7 +279,7 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
           } else {
             if (urls.has(mirror.url)) issues.push({ path: `${path}.url`, code: "duplicate_value", message: "must not duplicate an artifact URL" });
             urls.add(mirror.url);
-            if (version && (!mirror.url.includes(version) || /@(main|master|head)(?:\/|$)/i.test(mirror.url))) {
+            if (version && !artifactUrlPinsVersion(mirror.url, version)) {
               issues.push({ path: `${path}.url`, code: "invalid_value", message: "must identify the immutable manifest version" });
             }
           }

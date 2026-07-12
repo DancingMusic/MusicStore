@@ -7,6 +7,8 @@ import {
   type ConnectorManifest,
 } from "../index";
 
+const VALID_SRI = `sha256-${"A".repeat(43)}=` as const;
+
 function manifest(id = "example"): ConnectorManifest {
   return {
     schemaVersion: 1,
@@ -27,7 +29,7 @@ function manifest(id = "example"): ConnectorManifest {
     artifact: {
       url: `https://cdn.example.com/${id}@v1.2.3/index.js`,
       format: "esm",
-      integrity: "sha256-YWJj",
+      integrity: VALID_SRI,
     },
     permissions: { networkOrigins: ["https://api.example.com"] },
     tags: ["example"],
@@ -45,7 +47,7 @@ describe("connector manifest validation", () => {
 
   it("accepts pinned regional mirrors and release metadata", () => {
     const value = manifest();
-    value.artifact.integrity = "sha256-YWJj";
+    value.artifact.integrity = VALID_SRI;
     value.artifact.mirrors = [
       { region: "global", url: "https://global.example.com/example@v1.2.3/index.js" },
       { region: "china", url: "https://china.example.com/example@v1.2.3/index.js" },
@@ -69,7 +71,7 @@ describe("connector manifest validation", () => {
 
   it("rejects a floating mirror branch", () => {
     const value = manifest();
-    value.artifact.integrity = "sha256-YWJj";
+    value.artifact.integrity = VALID_SRI;
     value.artifact.mirrors = [{ region: "global", url: "https://cdn.example.com/example@main/index.js" }];
     expect(validateConnectorManifest(value).issues.some(issue => issue.path === "$.artifact.mirrors[0].url")).toBe(true);
   });
@@ -80,6 +82,20 @@ describe("connector manifest validation", () => {
     expect(validateConnectorManifest(value).issues).toContainEqual(expect.objectContaining({
       path: "$.artifact.integrity",
       code: "missing_field",
+    }));
+  });
+
+  it("rejects truncated integrity and versions that only appear outside the path", () => {
+    const truncated = manifest();
+    truncated.artifact.integrity = "sha256-YWJj";
+    expect(validateConnectorManifest(truncated).issues).toContainEqual(expect.objectContaining({
+      path: "$.artifact.integrity",
+    }));
+
+    const versionInQuery = manifest();
+    versionInQuery.artifact.url = "https://cdn.example.com/example/index.js?version=1.2.3";
+    expect(validateConnectorManifest(versionInQuery).issues).toContainEqual(expect.objectContaining({
+      path: "$.artifact.url",
     }));
   });
 

@@ -14,6 +14,26 @@ export class MusicConnectorRegistry {
     this.connectors.set(connector.meta.id, connector);
   }
 
+  /**
+   * Initialize a replacement before publishing it, then dispose the previous
+   * instance only after the swap succeeds. A failed init therefore leaves the
+   * working connector and active selection untouched.
+   */
+  async replace(connector: MusicConnector, config?: Record<string, unknown>): Promise<void> {
+    const id = connector.meta.id;
+    const previous = this.connectors.get(id);
+    if (!previous) throw new Error(`Connector "${id}" is not registered`);
+    if (previous === connector) throw new Error(`Connector "${id}" replacement must be a new instance`);
+
+    if (connector.init) await connector.init(config);
+    this.connectors.set(id, connector);
+    try {
+      previous.dispose?.();
+    } catch (error) {
+      console.warn(`[music-store] Connector "${id}" dispose failed after replacement`, error);
+    }
+  }
+
   unregister(connectorId: string): void {
     const connector = this.connectors.get(connectorId);
     if (!connector) return;
