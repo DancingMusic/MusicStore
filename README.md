@@ -142,6 +142,10 @@ The responsibility overview is published from `docs/` by
 
 https://dancingmusic.github.io/docs/connectors/
 
+The same workflow builds and publishes the machine-readable central registry at:
+
+https://dancingmusic.github.io/MusicStore/registry/index.json
+
 ## License
 
 MIT
