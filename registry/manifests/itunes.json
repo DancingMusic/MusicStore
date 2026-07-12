@@ -16,6 +16,7 @@
   "capabilities": ["search", "stream", "lyrics", "playlist"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-iTunes@v0.5.2/dist/index.js", "format": "esm", "integrity": "sha256-EZBtiQRuCIi1yizmNURoVheuw6c4wzz6ra3HUhnVk6w=" },
   "permissions": { "networkOrigins": ["https://itunes.apple.com", "https://lrclib.net", "https://rss.applemarketingtools.com"] },
+  "discovery": { "recommendedRegions": ["global"], "priority": 90 },
   "tags": ["apple", "itunes", "preview"],
   "status": "active",
   "submittedAt": "2026-06-11T00:00:00.000Z",

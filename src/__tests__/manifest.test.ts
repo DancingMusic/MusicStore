@@ -45,6 +45,17 @@ describe("connector manifest validation", () => {
     expect(() => assertConnectorManifest(manifest())).not.toThrow();
   });
 
+  it("accepts bounded regional discovery metadata and rejects invalid values", () => {
+    const value = manifest();
+    value.discovery = { recommendedRegions: ["mainland", "global"], priority: 80 };
+    expect(validateConnectorManifest(value)).toEqual({ valid: true, issues: [] });
+
+    const invalid = { ...manifest(), discovery: { recommendedRegions: ["moon"], priority: 101 } };
+    const paths = validateConnectorManifest(invalid).issues.map(issue => issue.path);
+    expect(paths).toContain("$.discovery.recommendedRegions");
+    expect(paths).toContain("$.discovery.priority");
+  });
+
   it("accepts pinned regional mirrors and release metadata", () => {
     const value = manifest();
     value.artifact.integrity = VALID_SRI;

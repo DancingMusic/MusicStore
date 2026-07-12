@@ -114,6 +114,7 @@ tokens, API secrets, signing material, or mutable `@main` distribution URLs.
     "networkOrigins": ["https://api.example.com"],
     "account": false
   },
+  "discovery": { "recommendedRegions": ["global"], "priority": 80 },
   "status": "active",
   "submittedAt": "2026-07-12T00:00:00.000Z",
   "updatedAt": "2026-07-12T00:00:00.000Z"

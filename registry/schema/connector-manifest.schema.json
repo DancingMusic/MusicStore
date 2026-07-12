@@ -69,6 +69,17 @@
         "account": { "type": "boolean" }
       }
     },
+    "discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "recommendedRegions": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "enum": ["mainland", "global"] }
+        },
+        "priority": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
     "tags": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
     "status": { "enum": ["active", "deprecated", "unlisted"] },
     "submittedAt": { "type": "string", "format": "date-time" },

@@ -16,6 +16,7 @@
   "capabilities": ["search", "stream", "playlist", "login", "user-library", "recommendations"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-QQMusic-Account@v0.2.0/dist/index.js", "format": "esm", "integrity": "sha256-mKCalW/XaU8qh/mfCw+f5hu3TPd/tWpKWu3r7o8BLlA=" },
   "permissions": { "networkOrigins": [], "account": true },
+  "discovery": { "recommendedRegions": ["mainland"], "priority": 100 },
   "tags": ["qq-music", "account", "official-web-login", "qr-login", "zero-config"],
   "status": "active",
   "submittedAt": "2026-07-12T14:15:00.000Z",

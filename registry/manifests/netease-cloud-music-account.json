@@ -16,6 +16,7 @@
   "capabilities": ["search", "stream", "lyrics", "playlist", "login"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase-Account@v0.1.0/dist/index.js", "format": "esm", "integrity": "sha256-r2dox1d5tu+dIF+zuNSJzNDFVCVPxXUhuSdHYWn70xI=" },
   "permissions": { "networkOrigins": [], "account": true },
+  "discovery": { "recommendedRegions": ["mainland"], "priority": 90 },
   "tags": ["netease", "account", "official-web-login", "qr-login", "desktop"],
   "status": "active",
   "submittedAt": "2026-07-12T14:15:00.000Z",

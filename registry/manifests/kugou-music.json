@@ -16,6 +16,7 @@
   "capabilities": ["search", "stream", "lyrics", "playlist"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-KuGou@v0.1.1/dist/index.js", "format": "esm", "integrity": "sha256-MnzMElAg0O96FxgSyCcE3OBjn6hoSn1apkvtnVtnERI=" },
   "permissions": { "networkOrigins": [], "account": false },
+  "discovery": { "recommendedRegions": ["mainland"], "priority": 80 },
   "tags": ["kugou", "anonymous", "self-hosted-gateway", "lyrics", "playlist"],
   "status": "active",
   "submittedAt": "2026-07-12T00:00:00.000Z",

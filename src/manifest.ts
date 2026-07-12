@@ -29,6 +29,11 @@ export interface ConnectorManifestPermissions {
   account?: boolean;
 }
 
+export interface ConnectorManifestDiscovery {
+  recommendedRegions?: ("mainland" | "global")[];
+  priority?: number;
+}
+
 export interface ConnectorManifest {
   schemaVersion: typeof CONNECTOR_MANIFEST_SCHEMA_VERSION;
   id: string;
@@ -49,6 +54,7 @@ export interface ConnectorManifest {
   releaseNotesUrl?: string;
   publishedAt?: string;
   permissions?: ConnectorManifestPermissions;
+  discovery?: ConnectorManifestDiscovery;
   tags?: string[];
   status: ConnectorManifestStatus;
   submittedAt: string;
@@ -97,12 +103,13 @@ const TOP_LEVEL_FIELDS = new Set([
   "schemaVersion", "id", "name", "description", "publisher", "repository",
   "homepage", "license", "version", "protocolVersion", "capabilities",
   "artifact", "releaseNotesUrl", "publishedAt", "permissions", "tags", "status", "submittedAt", "updatedAt",
-  "familyId", "variant", "authRequirement", "platforms",
+  "familyId", "variant", "authRequirement", "platforms", "discovery",
 ]);
 const PUBLISHER_FIELDS = new Set(["name", "url"]);
 const ARTIFACT_FIELDS = new Set(["url", "format", "integrity", "mirrors"]);
 const MIRROR_FIELDS = new Set(["region", "url"]);
 const PERMISSION_FIELDS = new Set(["networkOrigins", "account"]);
+const DISCOVERY_FIELDS = new Set(["recommendedRegions", "priority"]);
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SEMVER_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
 const SEMVER_RANGE_PATTERN = /^(?:[~^]|>=?|<=?)?\s*(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:\s+-\s+(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*))?$/;
@@ -309,6 +316,25 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
             }
           });
         }
+      }
+    }
+  }
+
+  if (value.discovery !== undefined) {
+    if (!isRecord(value.discovery)) {
+      issues.push({ path: "$.discovery", code: "invalid_type", message: "must be an object" });
+    } else {
+      hasUnknownFields(value.discovery, DISCOVERY_FIELDS, "$.discovery", issues);
+      if (value.discovery.recommendedRegions !== undefined) {
+        const regions = value.discovery.recommendedRegions;
+        if (!Array.isArray(regions) || regions.length === 0 || regions.some(region => region !== "mainland" && region !== "global")) {
+          issues.push({ path: "$.discovery.recommendedRegions", code: "invalid_value", message: "must contain mainland and/or global" });
+        } else if (new Set(regions).size !== regions.length) {
+          issues.push({ path: "$.discovery.recommendedRegions", code: "duplicate_value", message: "must not contain duplicate regions" });
+        }
+      }
+      if (value.discovery.priority !== undefined && (typeof value.discovery.priority !== "number" || !Number.isInteger(value.discovery.priority) || value.discovery.priority < 0 || value.discovery.priority > 100)) {
+        issues.push({ path: "$.discovery.priority", code: "invalid_value", message: "must be an integer from 0 through 100" });
       }
     }
   }
