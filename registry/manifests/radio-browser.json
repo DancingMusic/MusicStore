@@ -4,7 +4,7 @@
   "familyId": "radio-browser",
   "variant": "anonymous",
   "authRequirement": "none",
-  "platforms": ["web", "desktop"],
+  "platforms": ["web", "desktop", "ios", "android"],
   "name": "Radio Browser",
   "description": "Community-maintained internet radio station search and live streams.",
   "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },

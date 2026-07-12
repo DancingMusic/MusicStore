@@ -26,7 +26,18 @@
 - [ ] Move protocol compatibility exports to `MusicConnect` after host and all
   connectors have migrated; removal requires a separate major release.
 
-## Milestone D — Account connector variants
+## Milestone D — Native mobile discovery
+
+- [x] Extend manifest schema and runtime validation with `ios` and `android`.
+- [x] Audit connector implementations before adding native platform claims.
+- [x] Publish iTunes, Internet Archive, and Radio Browser as the initial
+  credential-free native mobile set.
+- [ ] Validate and document mobile gateway configuration before enabling the
+  NetEase, QQ Music, or KuGou gateway variants on native hosts.
+- [ ] Implement and validate a native authorization flow before enabling the
+  Spotify account variant on native hosts.
+
+## Milestone E — Account connector variants
 
 - [x] Register the independent NetEase Cloud Music account connector without
   replacing the anonymous family member.
