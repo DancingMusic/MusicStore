@@ -16,6 +16,7 @@
   "capabilities": ["search", "stream", "playlist", "login"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-Spotify@v0.3.2/dist/index.js", "format": "esm", "integrity": "sha256-haF8dFrWbObmkJNrgZTAUFa/cwkVqph3rey7d/R8ECk=" },
   "permissions": { "networkOrigins": ["https://api.spotify.com"], "account": true },
+  "discovery": { "recommendedRegions": ["global"], "priority": 100 },
   "tags": ["spotify", "preview", "playlist"],
   "status": "active",
   "submittedAt": "2026-06-11T00:00:00.000Z",

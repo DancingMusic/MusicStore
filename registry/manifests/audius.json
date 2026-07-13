@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "audius",
+  "familyId": "audius",
+  "variant": "anonymous",
+  "authRequirement": "none",
+  "platforms": ["web", "desktop"],
+  "name": "Audius",
+  "description": "Zero-configuration search, trending playlists, artwork, and streaming through the official Audius read-only API.",
+  "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
+  "repository": "https://github.com/DancingMusic/MusicConnect-Audius",
+  "license": "MIT",
+  "version": "0.1.0",
+  "protocolVersion": ">=0.2.0",
+  "capabilities": ["search", "stream", "playlist", "recommendations"],
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-Audius@v0.1.0/dist/index.js", "format": "esm", "integrity": "sha256-SRGma45qdig4SEbaWLp859gWd3RCaNTC5rg739hZ3Tc=" },
+  "permissions": { "networkOrigins": ["https://api.audius.co"], "account": false },
+  "discovery": { "recommendedRegions": ["global"], "priority": 95 },
+  "tags": ["audius", "anonymous", "zero-config", "streaming", "playlist"],
+  "status": "active",
+  "submittedAt": "2026-07-13T02:05:00.000Z",
+  "updatedAt": "2026-07-13T02:05:00.000Z"
+}

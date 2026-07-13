@@ -57,6 +57,12 @@ Optional `homepage`, `permissions`, and `tags` fields support discovery and
 host review. Unknown fields are rejected so typos cannot silently enter the
 distribution index.
 
+Optional `discovery` metadata controls regional recommendation order without
+changing availability. `recommendedRegions` may contain `mainland` and/or
+`global`, while `priority` is a stable integer from 0 through 100. Hosts MUST
+keep non-matching connectors discoverable and MUST NOT infer this value from UI
+language or use it to activate, install, or authenticate a connector.
+
 Anonymous and account implementations for the same music platform are separate
 records with a shared `familyId` and distinct immutable `id` values. An account
 record MUST declare `variant: account`, `authRequirement: required`, the

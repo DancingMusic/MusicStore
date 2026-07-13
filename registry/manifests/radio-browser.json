@@ -16,6 +16,7 @@
   "capabilities": ["search", "stream"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-Radio@v0.1.3/dist/index.js", "format": "esm", "integrity": "sha256-FZyWRINebHVjroaGqRPynmxz6cnj3Jps8c4NaciNm3g=" },
   "permissions": { "networkOrigins": ["https://de1.api.radio-browser.info", "https://de2.api.radio-browser.info", "https://fi1.api.radio-browser.info"] },
+  "discovery": { "recommendedRegions": ["global"], "priority": 60 },
   "tags": ["radio", "live", "community"],
   "status": "active",
   "submittedAt": "2026-06-11T00:00:00.000Z",

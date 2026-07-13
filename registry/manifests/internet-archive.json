@@ -16,6 +16,7 @@
   "capabilities": ["search", "stream", "lyrics", "playlist"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-Archive@v0.4.2/dist/index.js", "format": "esm", "integrity": "sha256-nkDs5y6LW92AN9P4gQELtF33DxkfSAHolVTe6IcFNOw=" },
   "permissions": { "networkOrigins": ["https://archive.org", "https://lrclib.net"] },
+  "discovery": { "recommendedRegions": ["global"], "priority": 70 },
   "tags": ["archive", "community-audio", "open-audio"],
   "status": "active",
   "submittedAt": "2026-06-11T00:00:00.000Z",
