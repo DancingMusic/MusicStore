@@ -130,6 +130,7 @@ The package continues to export the existing runtime connector surface used by
 current hosts and connectors:
 
 - `MusicConnector` and related track, login, lyrics, and playlist types;
+- provider-normalized track access badges, entitlement, and preview metadata;
 - `MusicConnectorRegistry` with its existing registration and activation API;
 - `MusicStoreClient` and the legacy track/order types.
 

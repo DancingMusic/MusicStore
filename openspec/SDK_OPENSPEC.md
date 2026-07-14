@@ -1,9 +1,9 @@
 # OpenSpec: MusicStore Connector Registry
 
 - Spec-ID: `music-store-registry-openspec`
-- Version: `3.2.0`
+- Version: `3.2.1`
 - Status: `Active`
-- Last-Updated: `2026-07-12`
+- Last-Updated: `2026-07-15`
 
 ## Scope
 
@@ -107,6 +107,8 @@ The existing public connector runtime API remains exported for current hosts
 and connector implementations:
 
 - `MusicConnector` and related connector/login/playlist types;
+- optional track access badges, entitlement and preview metadata owned by
+  `MusicConnect` and re-exported unchanged for compatible hosts;
 - `MusicConnectorRegistry` with `register`, `unregister`, `activate`, `active`,
   `get`, `list`, and `dispose`;
 - `MusicStoreClient` and legacy track/order types.
@@ -123,6 +125,8 @@ and the host.
 - Use pinned version URLs for distributable connector artifacts.
 - Keep generated output deterministic apart from explicit generation metadata.
 - Preserve the existing connector registry public API during this migration.
+- Re-export the canonical `MusicConnect` contract without narrowing optional
+  provider-normalized access metadata.
 
 ## MUST NOT
 
