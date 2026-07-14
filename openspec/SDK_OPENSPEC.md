@@ -127,6 +127,8 @@ and the host.
 - Preserve the existing connector registry public API during this migration.
 - Re-export the canonical `MusicConnect` contract without narrowing optional
   provider-normalized access metadata.
+- Preserve granular `favorites-read` and `favorites-write` capabilities so a
+  host can independently discover remote favorite reads and idempotent writes.
 
 ## MUST NOT
 

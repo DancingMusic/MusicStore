@@ -97,6 +97,8 @@ const CAPABILITIES = new Set<MusicConnectorCapability>([
   "login",
   "user-library",
   "recommendations",
+  "favorites-read",
+  "favorites-write",
 ]);
 const STATUSES = new Set<ConnectorManifestStatus>(["active", "deprecated", "unlisted"]);
 const TOP_LEVEL_FIELDS = new Set([

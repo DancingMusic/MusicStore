@@ -35,7 +35,7 @@
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "enum": ["search", "stream", "lyrics", "playlist", "login", "user-library", "recommendations"] }
+      "items": { "enum": ["search", "stream", "lyrics", "playlist", "login", "user-library", "recommendations", "favorites-read", "favorites-write"] }
     },
     "artifact": {
       "type": "object",

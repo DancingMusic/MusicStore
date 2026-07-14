@@ -45,6 +45,12 @@ describe("connector manifest validation", () => {
     expect(() => assertConnectorManifest(manifest())).not.toThrow();
   });
 
+  it("accepts granular remote favorite capabilities", () => {
+    const value = manifest();
+    value.capabilities = ["search", "favorites-read", "favorites-write"];
+    expect(validateConnectorManifest(value)).toEqual({ valid: true, issues: [] });
+  });
+
   it("accepts bounded regional discovery metadata and rejects invalid values", () => {
     const value = manifest();
     value.discovery = { recommendedRegions: ["mainland", "global"], priority: 80 };

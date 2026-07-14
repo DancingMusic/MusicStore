@@ -129,7 +129,9 @@ field and lifecycle requirements.
 The package continues to export the existing runtime connector surface used by
 current hosts and connectors:
 
-- `MusicConnector` and related track, login, lyrics, and playlist types;
+- `MusicConnector` and related track, login, lyrics, playlist, and remote
+  favorite synchronization types;
+- granular `favorites-read` and `favorites-write` capability declarations;
 - provider-normalized track access badges, entitlement, and preview metadata;
 - `MusicConnectorRegistry` with its existing registration and activation API;
 - `MusicStoreClient` and the legacy track/order types.

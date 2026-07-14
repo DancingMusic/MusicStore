@@ -1,6 +1,6 @@
 {
   "name": "@dancingmusic/music-store",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Connector registry, submission validation, discovery, and distribution metadata for DancingMusic",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -44,7 +44,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@dancingmusic/music-connect": "github:DancingMusic/MusicConnect#6401268f3b548484df6fee9220683cd6e0d1eb87"
+    "@dancingmusic/music-connect": "github:DancingMusic/MusicConnect#935e7719975e2fbb9a8f08b77684d76d2f131a3f"
   },
   "overrides": {
     "esbuild": "0.28.1"
