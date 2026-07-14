@@ -11,14 +11,14 @@
   "repository": "https://github.com/DancingMusic/MusicConnect-QQMusic-Account",
   "homepage": "https://dancingmusic.github.io/MusicConnect-QQMusic-Account/",
   "license": "MIT",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "protocolVersion": ">=0.2.0",
   "capabilities": ["search", "stream", "lyrics", "playlist", "login", "user-library", "recommendations"],
-  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-QQMusic-Account@v0.3.0/dist/index.js", "format": "esm", "integrity": "sha256-PQGBvGYwkaROmkguPG93Jc5hTJdxLsuS6lyIxfeQFk4=" },
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-QQMusic-Account@v0.3.1/dist/index.js", "format": "esm", "integrity": "sha256-rpAtZyRDUCad113NzzRUueZT+lfJ4Y+Lmz6OilSPZ5Y=" },
   "permissions": { "networkOrigins": [], "account": true },
   "discovery": { "recommendedRegions": ["mainland"], "priority": 100 },
   "tags": ["qq-music", "account", "official-web-login", "qr-login", "zero-config"],
   "status": "active",
   "submittedAt": "2026-07-12T14:15:00.000Z",
-  "updatedAt": "2026-07-13T18:59:30.000Z"
+  "updatedAt": "2026-07-14T02:00:00.000Z"
 }
