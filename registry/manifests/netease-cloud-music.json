@@ -15,10 +15,19 @@
   "protocolVersion": ">=0.2.0",
   "capabilities": ["search", "stream", "lyrics", "playlist"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase@v0.5.3/dist/index.js", "format": "esm", "integrity": "sha256-P9zdKio45DxFur00AwjggWaNiTFmwjvtLqs4Ks/YEHU=" },
-  "permissions": { "networkOrigins": [], "account": false },
+  "permissions": {
+    "networkOrigins": [],
+    "artworkOrigins": [
+      "https://p1.music.126.net",
+      "https://p2.music.126.net",
+      "https://p3.music.126.net",
+      "https://p4.music.126.net"
+    ],
+    "account": false
+  },
   "discovery": { "recommendedRegions": ["mainland"], "priority": 90 },
   "tags": ["netease", "anonymous", "self-hosted-gateway", "lyrics", "playlist"],
   "status": "active",
   "submittedAt": "2026-06-11T00:00:00.000Z",
-  "updatedAt": "2026-07-12T00:00:00.000Z"
+  "updatedAt": "2026-07-16T00:00:00.000Z"
 }
