@@ -15,10 +15,10 @@
   "protocolVersion": ">=0.4.0",
   "capabilities": ["search", "stream", "lyrics", "playlist", "login", "user-library", "recommendations", "favorites-read", "favorites-write"],
   "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-QQMusic-Account@v0.4.1/dist/index.js", "format": "esm", "integrity": "sha256-xnwOBd6oPwrvjljnmw/zeylpm1phc24X0tPD6UW2LVA=" },
-  "permissions": { "networkOrigins": [], "account": true },
+  "permissions": { "networkOrigins": [], "artworkOrigins": ["https://y.gtimg.cn", "https://y.qq.com"], "account": true },
   "discovery": { "recommendedRegions": ["mainland"], "priority": 100 },
   "tags": ["qq-music", "account", "official-web-login", "qr-login", "zero-config"],
   "status": "active",
   "submittedAt": "2026-07-12T14:15:00.000Z",
-  "updatedAt": "2026-07-15T15:47:52.000Z"
+  "updatedAt": "2026-07-16T00:00:00.000Z"
 }

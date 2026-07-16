@@ -57,6 +57,15 @@ Optional `homepage`, `permissions`, and `tags` fields support discovery and
 host review. Unknown fields are rejected so typos cannot silently enter the
 distribution index.
 
+`permissions.artworkOrigins` is an optional list of unique exact HTTPS origins
+(scheme, host, and optional port only). It authorizes a host-owned artwork
+resolver to retrieve the exact `MusicTrack.coverUrl` or
+`MusicPlaylist.coverUrl` returned by that implementation. It does not grant the
+connector Worker network access and is therefore separate from
+`networkOrigins`. Paths, queries, fragments, URL credentials, redirects to a
+different origin, and non-HTTPS origins are not allowed. Adding an artwork
+origin is a permission expansion that requires review.
+
 Optional `discovery` metadata controls regional recommendation order without
 changing availability. `recommendedRegions` may contain `mainland` and/or
 `global`, while `priority` is a stable integer from 0 through 100. Hosts MUST
@@ -97,6 +106,11 @@ a declared, trusted and bounded credential-processing path.
    distribution index.
 5. Reviewers verify repository ownership, permissions, immutable artifact URL,
    declared capabilities, license, and protocol compatibility.
+
+Artwork review additionally verifies that each declared origin is used by the
+implementation's returned cover URLs and that the implementation does not put
+account credentials in those URLs. Production hosts trust this reviewed Store
+metadata rather than connector runtime self-declarations.
 
 Registry acceptance is metadata curation, not permission to copy implementation
 source into MusicStore.

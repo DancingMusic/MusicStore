@@ -25,6 +25,8 @@ export interface ConnectorManifestArtifactMirror {
 export interface ConnectorManifestPermissions {
   /** Network origins the connector implementation may contact at runtime. */
   networkOrigins?: string[];
+  /** Exact HTTPS origins whose returned cover URLs the host may normalize. */
+  artworkOrigins?: string[];
   /** Whether the connector asks the host to coordinate an account login flow. */
   account?: boolean;
 }
@@ -110,7 +112,7 @@ const TOP_LEVEL_FIELDS = new Set([
 const PUBLISHER_FIELDS = new Set(["name", "url"]);
 const ARTIFACT_FIELDS = new Set(["url", "format", "integrity", "mirrors"]);
 const MIRROR_FIELDS = new Set(["region", "url"]);
-const PERMISSION_FIELDS = new Set(["networkOrigins", "account"]);
+const PERMISSION_FIELDS = new Set(["networkOrigins", "artworkOrigins", "account"]);
 const DISCOVERY_FIELDS = new Set(["recommendedRegions", "priority"]);
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SEMVER_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
@@ -124,6 +126,21 @@ function isHttpsUrl(value: string): boolean {
   try {
     const url = new URL(value);
     return url.protocol === "https:" && !url.username && !url.password;
+  } catch {
+    return false;
+  }
+}
+
+function isExactHttpsOrigin(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:"
+      && !url.username
+      && !url.password
+      && url.origin === value
+      && url.pathname === "/"
+      && !url.search
+      && !url.hash;
   } catch {
     return false;
   }
@@ -315,6 +332,23 @@ export function validateConnectorManifest(value: unknown): ConnectorManifestVali
           value.permissions.networkOrigins.forEach((origin, index) => {
             if (typeof origin !== "string" || !isHttpsUrl(origin)) {
               issues.push({ path: `$.permissions.networkOrigins[${index}]`, code: "invalid_value", message: "must be an HTTPS origin" });
+            }
+          });
+        }
+      }
+      if (value.permissions.artworkOrigins !== undefined) {
+        if (!Array.isArray(value.permissions.artworkOrigins)) {
+          issues.push({ path: "$.permissions.artworkOrigins", code: "invalid_type", message: "must be an array" });
+        } else {
+          const origins = new Set<string>();
+          value.permissions.artworkOrigins.forEach((origin, index) => {
+            const path = `$.permissions.artworkOrigins[${index}]`;
+            if (typeof origin !== "string" || !isExactHttpsOrigin(origin)) {
+              issues.push({ path, code: "invalid_value", message: "must be an exact HTTPS origin without credentials, path, query, or fragment" });
+            } else if (origins.has(origin)) {
+              issues.push({ path, code: "duplicate_value", message: "must not duplicate an artwork origin" });
+            } else {
+              origins.add(origin);
             }
           });
         }

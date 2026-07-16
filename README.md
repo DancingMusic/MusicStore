@@ -112,6 +112,7 @@ tokens, API secrets, signing material, or mutable `@main` distribution URLs.
   },
   "permissions": {
     "networkOrigins": ["https://api.example.com"],
+    "artworkOrigins": ["https://images.example.com"],
     "account": false
   },
   "discovery": { "recommendedRegions": ["global"], "priority": 80 },
@@ -123,6 +124,10 @@ tokens, API secrets, signing material, or mutable `@main` distribution URLs.
 
 See [`openspec/SDK_OPENSPEC.md`](openspec/SDK_OPENSPEC.md) for the normative
 field and lifecycle requirements.
+
+`artworkOrigins` contains exact HTTPS origins only. It lets a host normalize
+the connector's returned cover URLs for Canvas/WebGL without expanding the
+connector Worker's `networkOrigins` or introducing provider-specific host code.
 
 ## Runtime compatibility
 

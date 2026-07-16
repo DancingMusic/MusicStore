@@ -31,7 +31,10 @@ function manifest(id = "example"): ConnectorManifest {
       format: "esm",
       integrity: VALID_SRI,
     },
-    permissions: { networkOrigins: ["https://api.example.com"] },
+    permissions: {
+      networkOrigins: ["https://api.example.com"],
+      artworkOrigins: ["https://images.example.com"],
+    },
     tags: ["example"],
     status: "active",
     submittedAt: "2026-07-01T00:00:00.000Z",
@@ -49,6 +52,29 @@ describe("connector manifest validation", () => {
     const value = manifest();
     value.capabilities = ["search", "favorites-read", "favorites-write"];
     expect(validateConnectorManifest(value)).toEqual({ valid: true, issues: [] });
+  });
+
+  it("accepts exact artwork origins and rejects unsafe or duplicate values", () => {
+    const value = manifest();
+    value.permissions = {
+      artworkOrigins: [
+        "https://images.example.com",
+        "https://images.example.com/path",
+        "https://images.example.com?size=300",
+        "https://user@images.example.com",
+        "http://images.example.com",
+        "https://images.example.com",
+      ],
+    };
+
+    const issues = validateConnectorManifest(value).issues.filter(issue => issue.path.startsWith("$.permissions.artworkOrigins"));
+    expect(issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ path: "$.permissions.artworkOrigins[1]", code: "invalid_value" }),
+      expect.objectContaining({ path: "$.permissions.artworkOrigins[2]", code: "invalid_value" }),
+      expect.objectContaining({ path: "$.permissions.artworkOrigins[3]", code: "invalid_value" }),
+      expect.objectContaining({ path: "$.permissions.artworkOrigins[4]", code: "invalid_value" }),
+      expect.objectContaining({ path: "$.permissions.artworkOrigins[5]", code: "duplicate_value" }),
+    ]));
   });
 
   it("accepts bounded regional discovery metadata and rejects invalid values", () => {
