@@ -6,19 +6,28 @@
   "authRequirement": "required",
   "platforms": ["desktop"],
   "name": "NetEase Cloud Music Account",
-  "description": "NetEase account login through the official web QR page with host-owned secure cookie capture.",
+  "description": "NetEase account login and catalog access through the official web session and a bounded host-owned provider adapter.",
   "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
   "repository": "https://github.com/DancingMusic/MusicConnect-NetEase-Account",
   "homepage": "https://dancingmusic.github.io/MusicConnect-NetEase-Account/",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "protocolVersion": ">=0.2.0",
   "capabilities": ["search", "stream", "lyrics", "playlist", "login"],
-  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase-Account@v0.1.0/dist/index.js", "format": "esm", "integrity": "sha256-r2dox1d5tu+dIF+zuNSJzNDFVCVPxXUhuSdHYWn70xI=" },
-  "permissions": { "networkOrigins": [], "account": true },
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase-Account@v0.2.0/dist/index.js", "format": "esm", "integrity": "sha256-cXfwp32gnw07Idmg3qHxaJid7bA3Ke5c8oAJ6diL0pw=" },
+  "permissions": {
+    "networkOrigins": [],
+    "artworkOrigins": [
+      "https://p1.music.126.net",
+      "https://p2.music.126.net",
+      "https://p3.music.126.net",
+      "https://p4.music.126.net"
+    ],
+    "account": true
+  },
   "discovery": { "recommendedRegions": ["mainland"], "priority": 90 },
-  "tags": ["netease", "account", "official-web-login", "qr-login", "desktop"],
+  "tags": ["netease", "account", "official-web-login", "official-provider", "qr-login", "desktop"],
   "status": "active",
   "submittedAt": "2026-07-12T14:15:00.000Z",
-  "updatedAt": "2026-07-12T14:15:00.000Z"
+  "updatedAt": "2026-07-17T00:00:00.000Z"
 }
