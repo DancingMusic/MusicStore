@@ -6,15 +6,15 @@
   "authRequirement": "required",
   "platforms": ["desktop"],
   "name": "NetEase Cloud Music Account",
-  "description": "NetEase account login and catalog access through the official web session and a bounded host-owned provider adapter.",
+  "description": "NetEase account login, account playlists and catalog access through the official web session and a bounded host-owned provider adapter.",
   "publisher": { "name": "DancingMusic", "url": "https://github.com/DancingMusic" },
   "repository": "https://github.com/DancingMusic/MusicConnect-NetEase-Account",
   "homepage": "https://dancingmusic.github.io/MusicConnect-NetEase-Account/",
   "license": "MIT",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "protocolVersion": ">=0.2.0",
   "capabilities": ["search", "stream", "lyrics", "playlist", "login"],
-  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase-Account@v0.2.0/dist/index.js", "format": "esm", "integrity": "sha256-cXfwp32gnw07Idmg3qHxaJid7bA3Ke5c8oAJ6diL0pw=" },
+  "artifact": { "url": "https://cdn.jsdelivr.net/gh/DancingMusic/MusicConnect-NetEase-Account@v0.3.0/dist/index.js", "format": "esm", "integrity": "sha256-pZYyk7GjiK0Us95n7wh0aImbWVkL7tgC0Pyae6Lb+KQ=" },
   "permissions": {
     "networkOrigins": [],
     "artworkOrigins": [
@@ -29,5 +29,5 @@
   "tags": ["netease", "account", "official-web-login", "official-provider", "qr-login", "desktop"],
   "status": "active",
   "submittedAt": "2026-07-12T14:15:00.000Z",
-  "updatedAt": "2026-07-17T00:00:00.000Z"
+  "updatedAt": "2026-07-17T22:55:00.000Z"
 }
